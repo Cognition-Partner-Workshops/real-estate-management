@@ -6,7 +6,7 @@ import {
   markEnquiryAsRead,
   deleteEnquiry,
 } from '@/api';
-import type { CreateEnquiryPayload } from '@/types';
+import type { CreateEnquiryPayload, Enquiry } from '@/types';
 
 export const ENQUIRIES_QUERY_KEY = 'enquiries';
 export const ENQUIRY_QUERY_KEY = 'enquiry';
@@ -16,6 +16,7 @@ export function useEnquiries(enabled = true) {
     queryKey: [ENQUIRIES_QUERY_KEY],
     queryFn: fetchEnquiries,
     enabled,
+    select: (response) => response.data,
   });
 }
 
@@ -24,7 +25,21 @@ export function useEnquiry(id: string | undefined, enabled = true) {
     queryKey: [ENQUIRY_QUERY_KEY, id],
     queryFn: () => fetchEnquiry(id!),
     enabled: enabled && !!id,
+    select: (response) => response.data,
   });
+}
+
+export function useRelatedEnquiries(
+  propertyId: string | undefined,
+  currentEnquiryId: string | undefined,
+  enquiries: Enquiry[] | undefined
+): Enquiry[] {
+  if (!propertyId || !enquiries) return [];
+  return enquiries.filter(
+    (enq) =>
+      enq.property.property_id === propertyId &&
+      (!currentEnquiryId || enq.enquiry_id !== currentEnquiryId)
+  );
 }
 
 export function useCreateEnquiry() {

@@ -7,6 +7,7 @@ const MapPage = lazy(() => import('@/pages/map/MapPage'));
 const PropertiesPage = lazy(() => import('@/pages/properties/PropertiesPage'));
 const PropertyDetailPage = lazy(() => import('@/pages/properties/PropertyDetailPage'));
 const EnquiriesPage = lazy(() => import('@/pages/enquiries/EnquiriesPage'));
+const EnquiriesDetailPage = lazy(() => import('@/pages/enquiries/detail/EnquiriesDetailPage'));
 const MortgageCalcPage = lazy(() => import('@/pages/mortgage-calc/MortgageCalcPage'));
 const SettingsPage = lazy(() => import('@/pages/settings/SettingsPage'));
 const ProfilePage = lazy(() => import('@/pages/user/profile/ProfilePage'));
@@ -52,6 +53,14 @@ function LazyEnquiriesPage(): ReactElement {
   return (
     <Suspense fallback={<PageLoader />}>
       <EnquiriesPage />
+    </Suspense>
+  );
+}
+
+function LazyEnquiriesDetailPage(): ReactElement {
+  return (
+    <Suspense fallback={<PageLoader />}>
+      <EnquiriesDetailPage />
     </Suspense>
   );
 }
@@ -144,6 +153,10 @@ export const routes: RouteObject[] = [
       {
         path: 'enquiries',
         element: <LazyEnquiriesPage />,
+      },
+      {
+        path: 'enquiries/:id',
+        element: <LazyEnquiriesDetailPage />,
       },
       {
         path: 'mortgage-calc',

@@ -17,11 +17,11 @@ export async function createEnquiry(payload: CreateEnquiryPayload): Promise<ApiR
 }
 
 export async function markEnquiryAsRead(id: string): Promise<ApiResponse<Enquiry>> {
-  const response = await apiClient.patch<ApiResponse<Enquiry>>(`/enquiries/read/${id}`);
+  const response = await apiClient.patch<ApiResponse<Enquiry>>(`/enquiries/${id}`, { read: true });
   return response.data;
 }
 
-export async function deleteEnquiry(id: string): Promise<ApiResponse<Enquiry>> {
-  const response = await apiClient.delete<ApiResponse<Enquiry>>(`/enquiries/${id}`);
+export async function deleteEnquiry(id: string): Promise<ApiResponse<void>> {
+  const response = await apiClient.delete<ApiResponse<void>>(`/enquiries/${id}`);
   return response.data;
 }
