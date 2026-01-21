@@ -7,3 +7,4 @@ export { Skeleton, SkeletonCard } from './Skeleton';
 export { Badge, PropertyBadge, EnquiryBadge } from './Badge';
 export { default as AlertCard } from './AlertCard';
 export { default as HorizontalSlide } from './HorizontalSlide';
+export { NotificationBadge } from './NotificationBadge';
