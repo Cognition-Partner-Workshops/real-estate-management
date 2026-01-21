@@ -1,5 +1,5 @@
 import type { ReactElement } from 'react';
-import { PropertyType } from '@/types';
+import { PropertyType, EnquiryTopic } from '@/types';
 
 type BadgeVariant = 'default' | 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info';
 
@@ -51,5 +51,34 @@ function PropertyBadge({ type, className = '' }: PropertyBadgeProps): ReactEleme
   );
 }
 
-export { Badge, PropertyBadge };
+interface EnquiryBadgeProps {
+  topic: EnquiryTopic;
+  className?: string;
+}
+
+const enquiryTopicColors: Record<EnquiryTopic, string> = {
+  [EnquiryTopic.Info]: 'bg-gray-100 text-gray-600',
+  [EnquiryTopic.Sales]: 'bg-yellow-100 text-yellow-800',
+  [EnquiryTopic.Schedule]: 'bg-red-100 text-red-800',
+  [EnquiryTopic.Payment]: 'bg-green-100 text-green-800',
+};
+
+const enquiryTopicLabels: Record<EnquiryTopic, string> = {
+  [EnquiryTopic.Info]: 'Enquire Information',
+  [EnquiryTopic.Sales]: 'About Sales',
+  [EnquiryTopic.Schedule]: 'About Schedule',
+  [EnquiryTopic.Payment]: 'About Payment',
+};
+
+function EnquiryBadge({ topic, className = '' }: EnquiryBadgeProps): ReactElement {
+  return (
+    <span
+      className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${enquiryTopicColors[topic]} ${className}`}
+    >
+      {enquiryTopicLabels[topic]}
+    </span>
+  );
+}
+
+export { Badge, PropertyBadge, EnquiryBadge };
 export default Badge;
