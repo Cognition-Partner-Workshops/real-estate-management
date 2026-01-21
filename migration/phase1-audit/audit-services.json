@@ -1,0 +1,254 @@
+{
+  "services": {
+    "PropertiesService": {
+      "path": "frontend/src/app/properties/properties.service.ts",
+      "providedIn": "root",
+      "dependencies": ["HttpClient", "UserService"],
+      "stateManagement": {
+        "pattern": "BehaviorSubject with Observable exposure",
+        "signals": ["isLoading", "hasMore"],
+        "subjects": [
+          {
+            "name": "propertiesSub",
+            "type": "BehaviorSubject<Property[] | undefined>",
+            "observable": "properties$"
+          },
+          {
+            "name": "propertiesOwnedSub",
+            "type": "BehaviorSubject<Property[] | undefined>",
+            "observable": "propertiesOwned$"
+          }
+        ],
+        "reactEquivalent": "Zustand store or React Context with useState"
+      },
+      "methods": [
+        {
+          "name": "fetchProperties",
+          "httpVerb": "GET",
+          "endpoint": "/properties",
+          "parameters": ["sort", "filter", "search", "limit", "lastCreatedAt", "lastPrice", "lastName"],
+          "returnType": "Promise<ApiResponse<{items: Property[], lastCreatedAt?, lastPrice?, lastName?, hasMore?}>>",
+          "description": "Fetch paginated properties with cursor-based pagination"
+        },
+        {
+          "name": "fetchProperty",
+          "httpVerb": "GET",
+          "endpoint": "/properties/:id",
+          "parameters": ["id"],
+          "returnType": "Promise<ApiResponse<Property>>",
+          "description": "Fetch single property by ID"
+        },
+        {
+          "name": "addProperty",
+          "httpVerb": "POST",
+          "endpoint": "/properties",
+          "parameters": ["property (body)"],
+          "returnType": "Promise<ApiResponse<Property>>",
+          "description": "Create new property",
+          "requiresAuth": true
+        },
+        {
+          "name": "addPropertyImage",
+          "httpVerb": "POST",
+          "endpoint": "/properties/upload/images/:id",
+          "parameters": ["files (FormData)", "id"],
+          "returnType": "Promise<ApiResponse<string[]>>",
+          "description": "Upload images for property",
+          "requiresAuth": true
+        },
+        {
+          "name": "deletePropertyImage",
+          "httpVerb": "DELETE",
+          "endpoint": "/properties/upload/images/:id",
+          "parameters": ["images", "propId"],
+          "returnType": "Promise<ApiResponse<string[]>>",
+          "description": "Delete property images",
+          "requiresAuth": true
+        },
+        {
+          "name": "removeProperty",
+          "httpVerb": "DELETE",
+          "endpoint": "/properties/:id",
+          "parameters": ["propId"],
+          "returnType": "Promise<ApiResponse<Property>>",
+          "description": "Delete property",
+          "requiresAuth": true
+        },
+        {
+          "name": "updateProperty",
+          "httpVerb": "PATCH",
+          "endpoint": "/properties/:id",
+          "parameters": ["updated (body)"],
+          "returnType": "Promise<ApiResponse<Property>>",
+          "description": "Update property",
+          "requiresAuth": true
+        },
+        {
+          "name": "fetchOwnedProperties",
+          "httpVerb": "GET",
+          "endpoint": "/properties/me",
+          "parameters": [],
+          "returnType": "Promise<ApiResponse<Property[]>>",
+          "description": "Fetch current user's properties",
+          "requiresAuth": true
+        }
+      ],
+      "stateHelpers": [
+        {
+          "name": "addPropertyToState",
+          "description": "Add property to both properties and propertiesOwned arrays"
+        },
+        {
+          "name": "removePropertyFromState",
+          "description": "Remove property from both arrays by ID"
+        },
+        {
+          "name": "resetState",
+          "description": "Clear properties and pagination cursors"
+        },
+        {
+          "name": "setPropertiesState",
+          "description": "Append properties and update pagination cursors"
+        }
+      ]
+    },
+    "MapService": {
+      "path": "frontend/src/app/map/map.service.ts",
+      "providedIn": "root",
+      "dependencies": [],
+      "stateManagement": {
+        "pattern": "Stateless utility service",
+        "reactEquivalent": "Custom hook or utility functions"
+      },
+      "methods": [
+        {
+          "name": "addTiles",
+          "httpVerb": null,
+          "endpoint": null,
+          "parameters": ["map: L.Map", "isDark: boolean"],
+          "returnType": "void",
+          "description": "Add Stadia Maps tile layer to Leaflet map with theme support"
+        },
+        {
+          "name": "addMarker",
+          "httpVerb": null,
+          "endpoint": null,
+          "parameters": ["map: L.Map", "coord: Coord", "options: {icon?, popup?}"],
+          "returnType": "L.Marker",
+          "description": "Create and configure Leaflet marker with optional popup"
+        }
+      ]
+    },
+    "StorageService": {
+      "path": "frontend/src/app/shared/services/storage/storage.service.ts",
+      "providedIn": "root",
+      "dependencies": ["Storage (@ionic/storage-angular)"],
+      "stateManagement": {
+        "pattern": "Ionic Storage wrapper for persistence",
+        "reactEquivalent": "localStorage/sessionStorage wrapper or @ionic/storage with React hooks"
+      },
+      "methods": [
+        {
+          "name": "init",
+          "description": "Initialize Ionic Storage instance"
+        },
+        {
+          "name": "set",
+          "description": "Generic key-value setter"
+        },
+        {
+          "name": "get",
+          "description": "Generic key-value getter"
+        },
+        {
+          "name": "setDarkTheme",
+          "description": "Persist dark theme preference"
+        },
+        {
+          "name": "getDartTheme",
+          "description": "Retrieve dark theme preference"
+        },
+        {
+          "name": "setCoord",
+          "description": "Persist map center coordinates"
+        },
+        {
+          "name": "getCoord",
+          "description": "Retrieve map center coordinates"
+        },
+        {
+          "name": "setUser",
+          "description": "Persist user session data"
+        },
+        {
+          "name": "getUser",
+          "description": "Retrieve user session data"
+        },
+        {
+          "name": "removeUser",
+          "description": "Clear user session data"
+        }
+      ]
+    },
+    "WebSocketService": {
+      "path": "frontend/src/app/web-scoket/web-socket.service.ts",
+      "providedIn": "root",
+      "dependencies": ["EnquiriesService", "ActivitiesService", "NotificationsService"],
+      "stateManagement": {
+        "pattern": "WebSocket connection management with notification dispatch",
+        "reactEquivalent": "Custom useWebSocket hook with context for state updates"
+      },
+      "methods": [
+        {
+          "name": "connect",
+          "description": "Establish WebSocket connection with user token"
+        },
+        {
+          "name": "send",
+          "description": "Send message through WebSocket"
+        },
+        {
+          "name": "disconnect",
+          "description": "Close WebSocket connection"
+        },
+        {
+          "name": "handleNotification",
+          "description": "Route incoming notifications to appropriate services"
+        }
+      ],
+      "notificationTypes": ["Activity", "Enquiry", "User"]
+    }
+  },
+  "apiEndpointsSummary": {
+    "baseUrl": "http://localhost:8000/",
+    "webSocketUrl": "ws://localhost:8000/websocket",
+    "endpoints": [
+      { "method": "GET", "path": "/properties", "auth": false, "description": "List properties with pagination" },
+      { "method": "GET", "path": "/properties/:id", "auth": false, "description": "Get property by ID" },
+      { "method": "GET", "path": "/properties/me", "auth": true, "description": "Get user's properties" },
+      { "method": "POST", "path": "/properties", "auth": true, "description": "Create property" },
+      { "method": "PATCH", "path": "/properties/:id", "auth": true, "description": "Update property" },
+      { "method": "DELETE", "path": "/properties/:id", "auth": true, "description": "Delete property" },
+      { "method": "POST", "path": "/properties/upload/images/:id", "auth": true, "description": "Upload images" },
+      { "method": "DELETE", "path": "/properties/upload/images/:id", "auth": true, "description": "Delete images" }
+    ]
+  },
+  "reactMigrationNotes": {
+    "stateManagement": [
+      "BehaviorSubject pattern maps well to Zustand stores",
+      "Angular signals (signal, computed) map to useState and useMemo",
+      "toSignal() pattern maps to custom hooks that subscribe to observables",
+      "Consider TanStack Query for API state management"
+    ],
+    "httpClient": [
+      "Replace HttpClient with fetch or axios",
+      "Consider TanStack Query for caching and state management",
+      "JWT token handling can use axios interceptors"
+    ],
+    "webSocket": [
+      "WebSocket service can be adapted to React with minimal changes",
+      "Consider using a custom useWebSocket hook",
+      "State updates should dispatch to Zustand/Context"
+    ]
+  }
+}
