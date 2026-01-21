@@ -24,7 +24,8 @@ export async function fetchProperties(
   const queryParams = new URLSearchParams();
 
   if (sort) {
-    queryParams.append('sort', `${sort.field}:${sort.direction}`);
+    const sortValue = sort.field === 'createdAt' ? 'latest' : sort.field;
+    queryParams.append('sort', sortValue);
   }
   if (filter?.type) {
     queryParams.append('filter[type]', filter.type);
