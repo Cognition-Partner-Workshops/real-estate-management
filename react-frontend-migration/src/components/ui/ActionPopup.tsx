@@ -25,7 +25,7 @@ function ActionPopup({
 }: ActionPopupProps): ReactElement {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
+  const isAuthenticated = useAppSelector((state) => state.user.isAuthenticated);
 
   const handleAction = (action: ActionType): void => {
     if (!isAuthenticated) {

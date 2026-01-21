@@ -22,8 +22,8 @@ export const fetchActivities = createAsyncThunk<
   void,
   { state: RootState; rejectValue: string }
 >('activities/fetchActivities', async (_, { getState, rejectWithValue }) => {
-  const { auth } = getState();
-  const token = auth.accessToken;
+    const { user } = getState();
+    const token = user.accessToken;
 
   if (!token) {
     return rejectWithValue('No authentication token available');

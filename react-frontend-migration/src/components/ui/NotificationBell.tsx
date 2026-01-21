@@ -81,7 +81,7 @@ function NotificationBell(): ReactElement {
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  const accessToken = useAppSelector((state) => state.auth.accessToken);
+  const accessToken = useAppSelector((state) => state.user.accessToken);
   const allNotifications = useAppSelector((state) => state.notifications.notifications);
 
   const displayedNotifications = useMemo(

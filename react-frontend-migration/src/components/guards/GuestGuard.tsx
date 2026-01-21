@@ -13,7 +13,7 @@ interface GuestGuardProps {
  */
 function GuestGuard({ children }: GuestGuardProps): ReactElement {
   const location = useLocation();
-  const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
+  const isAuthenticated = useAppSelector((state) => state.user.isAuthenticated);
 
   if (isAuthenticated) {
     const from = (location.state as { from?: Location })?.from?.pathname || '/map';

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useCallback, useSyncExternalStore } from 'react';
 
 import { useAppDispatch, useAppSelector } from '@/store';
-import { addEnquiry, addNotification, logout } from '@/store/slices';
+import { addEnquiry, addToast, logout } from '@/store/slices';
 import type { Enquiry, Activity, UserNotification, WebSocketNotification } from '@/types';
 import { SocketNotificationType } from '@/types';
 
@@ -74,7 +74,7 @@ function getMessagesSnapshot(): string[] {
 
 export function useWebSocket(): UseWebSocketReturn {
   const dispatch = useAppDispatch();
-  const accessToken = useAppSelector((state) => state.auth.accessToken);
+  const accessToken = useAppSelector((state) => state.user.accessToken);
 
   const connectionStatus = useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
   const messages = useSyncExternalStore(subscribe, getMessagesSnapshot, getMessagesSnapshot);
@@ -92,7 +92,7 @@ export function useWebSocket(): UseWebSocketReturn {
         case SocketNotificationType.Activity: {
           const activity = notification.payload as ActivityPayload;
           currentDispatch(
-            addNotification({
+            addToast({
               type: 'info',
               message: activity.description || 'New activity',
             })
@@ -104,7 +104,7 @@ export function useWebSocket(): UseWebSocketReturn {
           const enquiry = notification.payload as Enquiry;
           currentDispatch(addEnquiry(enquiry));
           currentDispatch(
-            addNotification({
+            addToast({
               type: 'info',
               message: `New enquiry: ${enquiry.subject}`,
             })
@@ -115,7 +115,7 @@ export function useWebSocket(): UseWebSocketReturn {
         case SocketNotificationType.User: {
           const userNotification = notification.payload as UserNotification;
           currentDispatch(
-            addNotification({
+            addToast({
               type: 'info',
               message: userNotification.message,
             })
@@ -126,7 +126,7 @@ export function useWebSocket(): UseWebSocketReturn {
         case SocketNotificationType.Logout: {
           currentDispatch(logout());
           currentDispatch(
-            addNotification({
+            addToast({
               type: 'warning',
               message: 'You have been logged out',
             })
