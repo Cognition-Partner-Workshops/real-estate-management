@@ -9,7 +9,7 @@ const PropertyDetailPage = lazy(() => import('@/pages/properties/PropertyDetailP
 const EnquiriesPage = lazy(() => import('@/pages/enquiries/EnquiriesPage'));
 const MortgageCalcPage = lazy(() => import('@/pages/mortgage-calc/MortgageCalcPage'));
 const SettingsPage = lazy(() => import('@/pages/settings/SettingsPage'));
-const UserPage = lazy(() => import('@/pages/user/UserPage'));
+const ProfilePage = lazy(() => import('@/pages/user/profile/ProfilePage'));
 const AboutPage = lazy(() => import('@/pages/about/AboutPage'));
 
 function PageLoader(): ReactElement {
@@ -68,10 +68,10 @@ function LazySettingsPage(): ReactElement {
   );
 }
 
-function LazyUserPage(): ReactElement {
+function LazyProfilePage(): ReactElement {
   return (
     <Suspense fallback={<PageLoader />}>
-      <UserPage />
+      <ProfilePage />
     </Suspense>
   );
 }
@@ -119,7 +119,7 @@ export const routes: RouteObject[] = [
       },
       {
         path: 'user',
-        element: <LazyUserPage />,
+        element: <LazyProfilePage />,
       },
       {
         path: 'about',
