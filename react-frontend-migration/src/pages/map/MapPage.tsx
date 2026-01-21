@@ -75,6 +75,7 @@ interface MapControllerProps {
 
 function MapController({ center, targetCoord, onFlyComplete }: MapControllerProps): null {
   const map = useMap();
+  const hasInitialized = useRef<boolean>(false);
 
   useEffect(() => {
     if (targetCoord) {
@@ -84,7 +85,10 @@ function MapController({ center, targetCoord, onFlyComplete }: MapControllerProp
   }, [map, targetCoord, onFlyComplete]);
 
   useEffect(() => {
-    map.setView([center.lat, center.lng], DEFAULT_ZOOM);
+    if (!hasInitialized.current) {
+      hasInitialized.current = true;
+      map.setView([center.lat, center.lng], DEFAULT_ZOOM);
+    }
   }, [map, center]);
 
   return null;
