@@ -17,6 +17,7 @@ const SignInPage = lazy(() => import('@/pages/user/auth/SignInPage'));
 const RegisterPage = lazy(() => import('@/pages/user/auth/RegisterPage'));
 const NotificationsPage = lazy(() => import('@/pages/user/notifications/NotificationsPage'));
 const AboutPage = lazy(() => import('@/pages/about/AboutPage'));
+const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'));
 
 function PageLoader(): ReactElement {
   return (
@@ -138,6 +139,14 @@ function LazyNotificationsPage(): ReactElement {
   );
 }
 
+function LazyNotFoundPage(): ReactElement {
+  return (
+    <Suspense fallback={<PageLoader />}>
+      <NotFoundPage />
+    </Suspense>
+  );
+}
+
 export const routes: RouteObject[] = [
   {
     path: '/',
@@ -204,6 +213,10 @@ export const routes: RouteObject[] = [
       {
         path: 'about',
         element: <LazyAboutPage />,
+      },
+      {
+        path: '*',
+        element: <LazyNotFoundPage />,
       },
     ],
   },

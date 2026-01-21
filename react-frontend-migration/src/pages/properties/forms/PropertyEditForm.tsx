@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, type ReactElement, type FormEvent } from 'react';
+import { useState, useCallback, type ReactElement, type FormEvent } from 'react';
 
 import { Button, Input, Select, Textarea, Modal } from '@/components/ui';
 import { useUpdateProperty, useRestriction } from '@/hooks';
@@ -99,7 +99,26 @@ function PropertyEditForm({
   property,
   onSuccess,
 }: PropertyEditFormProps): ReactElement {
-  const [formData, setFormData] = useState<FormData>(getInitialFormData(property));
+  const formKey = isOpen && property ? property.property_id : 'closed';
+  
+  return (
+    <PropertyEditFormInner
+      key={formKey}
+      isOpen={isOpen}
+      onClose={onClose}
+      property={property}
+      onSuccess={onSuccess}
+    />
+  );
+}
+
+function PropertyEditFormInner({
+  isOpen,
+  onClose,
+  property,
+  onSuccess,
+}: PropertyEditFormProps): ReactElement {
+  const [formData, setFormData] = useState<FormData>(() => getInitialFormData(property));
   const [errors, setErrors] = useState<FormErrors>({});
   const [isMapOpen, setIsMapOpen] = useState(false);
 
@@ -114,12 +133,6 @@ function PropertyEditForm({
     [dispatch]
   );
 
-  useEffect(() => {
-    if (isOpen && property) {
-      setFormData(getInitialFormData(property));
-      setErrors({});
-    }
-  }, [isOpen, property]);
 
   const validateForm = useCallback((): boolean => {
     const newErrors: FormErrors = {};

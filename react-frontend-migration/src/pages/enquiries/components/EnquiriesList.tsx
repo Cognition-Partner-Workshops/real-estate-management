@@ -40,58 +40,58 @@ function EnquiriesList(): ReactElement {
   const sort = (searchParams.get('sort') as SortOption) || 'latest';
   const filter = searchParams.get('filter') || '';
 
-  const searchEnquiries = (items: Enquiry[], searchText: string): Enquiry[] => {
-    if (!searchText) {
-      return items;
-    }
-    const textToFind = searchText.toLowerCase();
-    return items.filter((item) => {
-      const subject = (item.title || '').toLowerCase();
-      const email = (item.users.from.email || '').toLowerCase();
-      return subject.includes(textToFind) || email.includes(textToFind);
-    });
-  };
-
-  const filterEnquiries = (items: Enquiry[], filterValue: string): Enquiry[] => {
-    if (!filterValue) {
-      return items;
-    }
-
-    const filters = filterValue.split(',');
-    const isSent = filters.includes('sent');
-    const isReceived = filters.includes('received');
-    const otherFilters = filters.filter((f) => !['sent', 'received'].includes(f));
-
-    return items.filter((item) => {
-      if (isSent && currentUserId !== item.users.from.user_id) {
-        return false;
-      }
-      if (isReceived && currentUserId === item.users.from.user_id) {
-        return false;
-      }
-      if (otherFilters.length > 0 && !otherFilters.includes(item.topic)) {
-        return false;
-      }
-      return true;
-    });
-  };
-
-  const sortEnquiries = (items: Enquiry[], sortBy: SortOption): Enquiry[] => {
-    switch (sortBy) {
-      case 'title':
-        return sortEnquiriesBySubject(items);
-      case 'oldest':
-        return sortEnquiriesByDate(items, false);
-      default:
-        return sortEnquiriesByDate(items);
-    }
-  };
-
   const enquiriesList = useMemo((): Enquiry[] => {
+    const searchEnquiries = (items: Enquiry[], searchText: string): Enquiry[] => {
+      if (!searchText) {
+        return items;
+      }
+      const textToFind = searchText.toLowerCase();
+      return items.filter((item) => {
+        const subject = (item.title || '').toLowerCase();
+        const email = (item.users.from.email || '').toLowerCase();
+        return subject.includes(textToFind) || email.includes(textToFind);
+      });
+    };
+
+    const filterEnquiriesItems = (items: Enquiry[], filterValue: string): Enquiry[] => {
+      if (!filterValue) {
+        return items;
+      }
+
+      const filters = filterValue.split(',');
+      const isSent = filters.includes('sent');
+      const isReceived = filters.includes('received');
+      const otherFilters = filters.filter((f) => !['sent', 'received'].includes(f));
+
+      return items.filter((item) => {
+        if (isSent && currentUserId !== item.users.from.user_id) {
+          return false;
+        }
+        if (isReceived && currentUserId === item.users.from.user_id) {
+          return false;
+        }
+        if (otherFilters.length > 0 && !otherFilters.includes(item.topic)) {
+          return false;
+        }
+        return true;
+      });
+    };
+
+    const sortEnquiriesItems = (items: Enquiry[], sortBy: SortOption): Enquiry[] => {
+      switch (sortBy) {
+        case 'title':
+          return sortEnquiriesBySubject(items);
+        case 'oldest':
+          return sortEnquiriesByDate(items, false);
+        default:
+          return sortEnquiriesByDate(items);
+      }
+    };
+
     let result = [...enquiries];
     result = searchEnquiries(result, search);
-    result = filterEnquiries(result, filter);
-    result = sortEnquiries(result, sort);
+    result = filterEnquiriesItems(result, filter);
+    result = sortEnquiriesItems(result, sort);
     return result;
   }, [enquiries, search, filter, sort, currentUserId]);
 

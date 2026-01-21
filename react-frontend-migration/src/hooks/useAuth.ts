@@ -1,10 +1,18 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { signIn, register, googleAuth, getCurrentUser, updateUser, changePassword } from '@/api';
 import { useAppDispatch } from '@/store';
-import { setCredentials, setUser, logout as logoutAction } from '@/store/slices/authSlice';
-import type { LoginCredentials, RegisterPayload, UpdateUserPayload, ChangePasswordPayload } from '@/types';
+import { setCredentials, setUser, logout as logoutAction } from '@/store/slices/userSlice';
+import type { LoginCredentials, RegisterPayload, UpdateUserPayload, ChangePasswordPayload, User, UserSignedIn } from '@/types';
 
 export const USER_QUERY_KEY = 'currentUser';
+
+function transformAuthResponse(data: Record<string, unknown>): UserSignedIn {
+  const { accessToken, ...userData } = data;
+  return {
+    user: userData as unknown as User,
+    accessToken: accessToken as string,
+  };
+}
 
 export function useCurrentUser(enabled = true) {
   return useQuery({
@@ -22,7 +30,8 @@ export function useSignIn() {
     mutationFn: (credentials: LoginCredentials) => signIn(credentials),
     onSuccess: (response) => {
       if (response.data) {
-        dispatch(setCredentials(response.data));
+        const credentials = transformAuthResponse(response.data as unknown as Record<string, unknown>);
+        dispatch(setCredentials(credentials));
         queryClient.invalidateQueries({ queryKey: [USER_QUERY_KEY] });
       }
     },
@@ -37,7 +46,8 @@ export function useRegister() {
     mutationFn: (payload: RegisterPayload) => register(payload),
     onSuccess: (response) => {
       if (response.data) {
-        dispatch(setCredentials(response.data));
+        const credentials = transformAuthResponse(response.data as unknown as Record<string, unknown>);
+        dispatch(setCredentials(credentials));
         queryClient.invalidateQueries({ queryKey: [USER_QUERY_KEY] });
       }
     },
@@ -52,7 +62,8 @@ export function useGoogleAuth() {
     mutationFn: (token: string) => googleAuth(token),
     onSuccess: (response) => {
       if (response.data) {
-        dispatch(setCredentials(response.data));
+        const credentials = transformAuthResponse(response.data as unknown as Record<string, unknown>);
+        dispatch(setCredentials(credentials));
         queryClient.invalidateQueries({ queryKey: [USER_QUERY_KEY] });
       }
     },

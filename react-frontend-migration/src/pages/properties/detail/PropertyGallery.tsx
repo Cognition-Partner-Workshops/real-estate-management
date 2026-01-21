@@ -1,4 +1,4 @@
-import { useState, useEffect, type ReactElement } from 'react';
+import { useState, useMemo, type ReactElement } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper/modules';
 
@@ -22,15 +22,13 @@ function PropertyGallery({
   showEdit = false,
   onEdit,
 }: PropertyGalleryProps): ReactElement {
-  const [selectedImage, setSelectedImage] = useState<string>(NO_IMAGE_PLACEHOLDER);
-
-  useEffect(() => {
-    if (images && images.length > 0) {
-      setSelectedImage(images[0]);
-    } else {
-      setSelectedImage(NO_IMAGE_PLACEHOLDER);
-    }
+  const defaultImage = useMemo(() => {
+    return images && images.length > 0 ? images[0] : NO_IMAGE_PLACEHOLDER;
   }, [images]);
+  
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  
+  const displayImage = selectedImage ?? defaultImage;
 
   const handleImageSelect = (image: string): void => {
     setSelectedImage(image || NO_IMAGE_PLACEHOLDER);
@@ -71,11 +69,11 @@ function PropertyGallery({
           <div
             className="absolute inset-0 z-0 bg-center bg-cover blur-sm scale-100 opacity-70"
             style={{
-              backgroundImage: `url(${selectedImage || 'https://placehold.co/1200x300'})`,
+              backgroundImage: `url(${displayImage || 'https://placehold.co/1200x300'})`,
             }}
           />
           <img
-            src={selectedImage}
+            src={displayImage}
             alt="Property"
             className="w-auto h-full object-cover z-10"
           />
@@ -104,7 +102,7 @@ function PropertyGallery({
                   />
                   <div
                     className={`absolute inset-0 rounded-lg transition-all ${
-                      selectedImage === image
+                      displayImage === image
                         ? 'border-2 border-blue-500 bg-blue-500/20'
                         : 'hover:bg-black/10'
                     }`}

@@ -103,7 +103,7 @@ function EnquiryNewForm({ property, userTo, replyTo }: EnquiryNewFormProps): Rea
           message: 'Success, message is sent.',
         })
       );
-    } catch (error) {
+    } catch {
       dispatch(
         addNotification({
           type: 'error',

@@ -113,14 +113,14 @@ function PropertyDetailPage(): ReactElement {
         })
       );
       navigate('/properties');
-    } catch (err) {
+    } catch {
       dispatch(
         addNotification({
           type: 'error',
           message: 'Failed to delete property',
         })
       );
-    } finally {
+    }finally {
       setShowDeleteConfirm(false);
     }
   }, [property, deletePropertyMutation, dispatch, navigate]);
