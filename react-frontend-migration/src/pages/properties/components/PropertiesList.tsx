@@ -1,10 +1,8 @@
-import { useCallback, useMemo, type ReactElement } from 'react';
+import { useCallback, useMemo, useEffect, useRef, useState, type ReactElement } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { IonInfiniteScroll, IonInfiniteScrollContent, IonRow } from '@ionic/react';
 import { useAppSelector, useAppDispatch } from '@/store';
 import {
   fetchPropertiesThunk,
-  selectProperties,
   selectPropertiesHasMore,
   selectPropertiesLoadingMore,
 } from '@/store/slices/propertiesSlice';
@@ -22,21 +20,6 @@ interface PropertiesListProps {
   enablePopupOptions?: boolean;
   properties?: Property[];
   disableInfiniteScroll?: boolean;
-}
-
-function debounce<T extends (...args: Parameters<T>) => void>(
-  func: T,
-  wait: number
-): (...args: Parameters<T>) => void {
-  let timeout: ReturnType<typeof setTimeout> | null = null;
-  return (...args: Parameters<T>): void => {
-    if (timeout) {
-      clearTimeout(timeout);
-    }
-    timeout = setTimeout(() => {
-      func(...args);
-    }, wait);
-  };
 }
 
 function searchProperties(search: string, properties: Property[]): Property[] {
@@ -96,8 +79,10 @@ function PropertiesList({
 }: PropertiesListProps): ReactElement {
   const dispatch = useAppDispatch();
   const [searchParams] = useSearchParams();
+  const loadMoreRef = useRef<HTMLDivElement>(null);
+  const [isLoadingLocal, setIsLoadingLocal] = useState(false);
+  const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const storeProperties = useAppSelector(selectProperties);
   const hasMore = useAppSelector(selectPropertiesHasMore);
   const isLoadingMore = useAppSelector(selectPropertiesLoadingMore);
 
@@ -105,7 +90,7 @@ function PropertiesList({
   const search = searchParams.get('search') || '';
   const filter = searchParams.get('filter') || '';
 
-  const properties = externalProperties ?? storeProperties;
+  const properties = externalProperties ?? [];
 
   const propertiesList = useMemo((): Property[] => {
     if (!properties || properties.length === 0) {
@@ -127,6 +112,12 @@ function PropertiesList({
   }, [properties, limit, search, filter, sort]);
 
   const loadMoreProperties = useCallback(async (): Promise<void> => {
+    if (isLoadingLocal || isLoadingMore || !hasMore || disableInfiniteScroll) {
+      return;
+    }
+
+    setIsLoadingLocal(true);
+
     const sortParam: PropertySort = {
       field: sort === 'price-asc' || sort === 'price-desc' ? 'price' :
              sort === 'name-asc' || sort === 'name-desc' ? 'name' : 'createdAt',
@@ -147,28 +138,54 @@ function PropertiesList({
       }
     }
 
-    await dispatch(
-      fetchPropertiesThunk({
-        sort: sortParam,
-        filter: filterParam,
-        search,
-        append: true,
-      })
+    try {
+      await dispatch(
+        fetchPropertiesThunk({
+          sort: sortParam,
+          filter: filterParam,
+          search,
+          append: true,
+        })
+      );
+    } finally {
+      setIsLoadingLocal(false);
+    }
+  }, [dispatch, sort, filter, search, hasMore, isLoadingLocal, isLoadingMore, disableInfiniteScroll]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        if (entry.isIntersecting && hasMore && !isLoadingLocal && !isLoadingMore && !disableInfiniteScroll) {
+          if (debounceTimerRef.current) {
+            clearTimeout(debounceTimerRef.current);
+          }
+          debounceTimerRef.current = setTimeout(() => {
+            loadMoreProperties();
+          }, 500);
+        }
+      },
+      {
+        root: null,
+        rootMargin: '80px',
+        threshold: 0.1,
+      }
     );
-  }, [dispatch, sort, filter, search]);
 
-  const debouncedLoadMore = useMemo(
-    () => debounce(loadMoreProperties, 1000),
-    [loadMoreProperties]
-  );
+    const currentRef = loadMoreRef.current;
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
 
-  const handleInfiniteScroll = async (event: CustomEvent<void>): Promise<void> => {
-    debouncedLoadMore();
-    const target = event.target as HTMLIonInfiniteScrollElement;
-    setTimeout(() => {
-      target.complete();
-    }, 1000);
-  };
+    return (): void => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+      }
+    };
+  }, [loadMoreProperties, hasMore, isLoadingLocal, isLoadingMore, disableInfiniteScroll]);
 
   const isInfiniteScrollDisabled = disableInfiniteScroll || !hasMore;
 
@@ -203,19 +220,16 @@ function PropertiesList({
         </section>
       )}
 
-      <IonRow>
-        <IonInfiniteScroll
-          threshold="80px"
-          onIonInfinite={handleInfiniteScroll}
-          disabled={isInfiniteScrollDisabled}
-        >
-          <IonInfiniteScrollContent
-            className={!isInfiniteScrollDisabled && isLoadingMore ? 'py-12' : ''}
-            loadingSpinner="bubbles"
-            loadingText="Loading data..."
-          />
-        </IonInfiniteScroll>
-      </IonRow>
+      {!isInfiniteScrollDisabled && (
+        <div ref={loadMoreRef} className="py-8 flex justify-center items-center">
+          {(isLoadingLocal || isLoadingMore) && (
+            <div className="flex flex-col items-center gap-2">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+              <span className="text-sm text-gray-500">Loading data...</span>
+            </div>
+          )}
+        </div>
+      )}
     </>
   );
 }
