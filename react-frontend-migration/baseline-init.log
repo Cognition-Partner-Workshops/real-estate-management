@@ -1,0 +1,174 @@
+# React Frontend Migration - Baseline Initialization Log
+
+## Project Scaffold Summary
+
+**Date:** 2026-01-21
+**Build Tool:** Vite 7.2.4
+**Framework:** React 19.2.0 with TypeScript 5.9.3
+
+## Installed Dependencies
+
+### Production Dependencies
+- react: ^19.2.0
+- react-dom: ^19.2.0
+- react-router-dom: ^7.12.0 (React Router v6+)
+- @reduxjs/toolkit: ^2.11.2
+- react-redux: ^9.2.0
+- @tanstack/react-query: ^5.90.19
+- axios: ^1.13.2
+
+### Development Dependencies
+- vite: ^7.2.4
+- @vitejs/plugin-react: ^5.1.1
+- typescript: ~5.9.3
+- tailwindcss: ^4.1.18
+- @tailwindcss/vite: ^4.1.18
+- postcss: ^8.5.6
+- autoprefixer: ^10.4.23
+- eslint: ^9.39.2
+- @typescript-eslint/eslint-plugin: ^8.53.1
+- @typescript-eslint/parser: ^8.53.1
+- eslint-plugin-react: ^7.37.5
+- eslint-plugin-react-hooks: ^7.0.1
+- eslint-plugin-react-refresh: ^0.4.24
+- eslint-config-prettier: ^10.1.8
+- eslint-plugin-prettier: ^5.5.5
+- prettier: ^3.8.1
+- vitest: ^4.0.17
+- @testing-library/react: ^16.3.2
+- @testing-library/jest-dom: ^6.9.1
+- jsdom: ^27.4.0
+
+## Project Structure Created
+
+```
+react-frontend-migration/
+├── src/
+│   ├── api/                    # API client and endpoint functions
+│   │   ├── client.ts           # Axios instance with interceptors
+│   │   ├── properties.ts       # Property API endpoints
+│   │   ├── auth.ts             # Authentication API endpoints
+│   │   ├── enquiries.ts        # Enquiry API endpoints
+│   │   └── index.ts
+│   ├── components/
+│   │   ├── ui/                 # Shared UI components
+│   │   │   ├── Button.tsx
+│   │   │   ├── Input.tsx
+│   │   │   ├── Modal.tsx
+│   │   │   ├── Card.tsx
+│   │   │   ├── Select.tsx
+│   │   │   ├── Skeleton.tsx
+│   │   │   ├── Badge.tsx
+│   │   │   └── index.ts
+│   │   └── Layout.tsx
+│   ├── hooks/                  # Custom React hooks
+│   │   ├── useProperties.ts
+│   │   ├── useAuth.ts
+│   │   ├── useEnquiries.ts
+│   │   └── index.ts
+│   ├── pages/                  # Route page components
+│   │   ├── map/
+│   │   ├── properties/
+│   │   ├── enquiries/
+│   │   ├── mortgage-calc/
+│   │   ├── settings/
+│   │   ├── user/
+│   │   └── about/
+│   ├── store/                  # Redux store
+│   │   ├── slices/
+│   │   │   ├── authSlice.ts
+│   │   │   ├── propertiesSlice.ts
+│   │   │   ├── enquiriesSlice.ts
+│   │   │   ├── uiSlice.ts
+│   │   │   └── index.ts
+│   │   ├── store.ts
+│   │   ├── hooks.ts
+│   │   └── index.ts
+│   ├── types/                  # TypeScript type definitions
+│   │   ├── property.ts
+│   │   ├── enquiry.ts
+│   │   ├── user.ts
+│   │   ├── api.ts
+│   │   └── index.ts
+│   ├── utils/                  # Utility functions (empty, ready for use)
+│   ├── App.tsx
+│   ├── main.tsx
+│   ├── router.config.tsx
+│   └── index.css               # Tailwind CSS imports
+├── public/
+├── .prettierrc
+├── eslint.config.js
+├── tsconfig.json
+├── tsconfig.app.json
+├── tsconfig.node.json
+├── vite.config.ts
+├── package.json
+├── REACT-CONVENTIONS.md
+└── baseline-init.log
+```
+
+## Routes Configured
+
+Based on audit-routes.json from Phase 1 audit:
+
+| Path | Component | Lazy Loaded |
+|------|-----------|-------------|
+| / | Redirect to /map | - |
+| /map | MapPage | Yes |
+| /properties | PropertiesPage | Yes |
+| /properties/:id | PropertyDetailPage | Yes |
+| /enquiries | EnquiriesPage | Yes |
+| /mortgage-calc | MortgageCalcPage | Yes |
+| /settings | SettingsPage | Yes |
+| /user | UserPage | Yes |
+| /about | AboutPage | Yes |
+
+## State Management
+
+Redux Toolkit configured with the following slices:
+- **authSlice**: User authentication state (user, accessToken, isAuthenticated)
+- **propertiesSlice**: Property listings state (properties, ownedProperties, filters, pagination)
+- **enquiriesSlice**: Enquiry management state (enquiries, selectedEnquiry)
+- **uiSlice**: UI state (darkMode, sidebar, notifications)
+
+## API Layer
+
+Axios client configured with:
+- Base URL: http://localhost:8000 (configurable via VITE_API_BASE_URL)
+- JWT token interceptor for authenticated requests
+- Error response interceptor for consistent error handling
+
+TanStack Query hooks created for:
+- Properties: useProperties, useProperty, useOwnedProperties, useCreateProperty, useUpdateProperty, useDeleteProperty
+- Auth: useSignIn, useRegister, useGoogleAuth, useUpdateUser, useChangePassword, useLogout
+- Enquiries: useEnquiries, useEnquiry, useCreateEnquiry, useMarkEnquiryAsRead, useDeleteEnquiry
+
+## Build Verification
+
+```
+Build Status: SUCCESS
+Build Time: 1.71s
+Output Directory: dist/
+Total Modules: 172
+```
+
+## Lint Status
+
+```
+Lint Status: PASS (0 errors, 19 warnings)
+Warnings: Missing return types on TanStack Query hooks (acceptable)
+```
+
+## Configuration Files
+
+- **vite.config.ts**: Configured with React plugin, Tailwind CSS, path aliases (@/), and API proxy
+- **tsconfig.app.json**: Strict TypeScript with path aliases
+- **eslint.config.js**: ESLint 9 flat config with TypeScript, React, and Prettier rules
+- **.prettierrc**: Consistent code formatting
+
+## Notes
+
+- All page components are placeholder implementations ready for feature migration
+- UI components follow the patterns identified in the Angular audit
+- Type definitions match the Angular interfaces from audit-structure.md
+- API endpoints match the backend routes from audit-services.json
