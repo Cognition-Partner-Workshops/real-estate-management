@@ -1,0 +1,116 @@
+{
+  "appRouting": {
+    "path": "frontend/src/app/app-routing.module.ts",
+    "preloadingStrategy": "PreloadAllModules",
+    "routes": [
+      {
+        "path": "",
+        "redirectTo": "map",
+        "pathMatch": "full"
+      },
+      {
+        "path": "folder/:id",
+        "loadChildren": "./folder/folder.module#FolderPageModule",
+        "lazyLoaded": true
+      },
+      {
+        "path": "map",
+        "loadChildren": "./map/map.module#MapPageModule",
+        "lazyLoaded": true
+      },
+      {
+        "path": "settings",
+        "loadChildren": "./settings/settings.module#SettingsPageModule",
+        "lazyLoaded": true
+      },
+      {
+        "path": "properties",
+        "loadChildren": "./properties/properties.module#PropertiesPageModule",
+        "lazyLoaded": true
+      },
+      {
+        "path": "enquiries",
+        "loadChildren": "./enquiries/enquiries.module#EnquiriesPageModule",
+        "lazyLoaded": true
+      },
+      {
+        "path": "mortgage-calc",
+        "loadChildren": "./mortgage-calc/mortgage-calc.module#MortgageCalcPageModule",
+        "lazyLoaded": true
+      },
+      {
+        "path": "user",
+        "loadChildren": "./user/user.module#UserPageModule",
+        "lazyLoaded": true
+      },
+      {
+        "path": "about",
+        "loadChildren": "./about/about.module#AboutPageModule",
+        "lazyLoaded": true
+      }
+    ]
+  },
+  "focusedModuleRoutes": {
+    "properties": {
+      "path": "frontend/src/app/properties/properties-routing.module.ts",
+      "routes": [
+        {
+          "path": "",
+          "component": "PropertiesPage",
+          "guards": [],
+          "description": "Main properties list page with search, filter, and sort"
+        },
+        {
+          "path": ":id",
+          "component": "PropertiesDetailComponent",
+          "guards": [],
+          "description": "Property detail view with enquiry form and mortgage calculator"
+        }
+      ]
+    },
+    "map": {
+      "path": "frontend/src/app/map/map-routing.module.ts",
+      "routes": [
+        {
+          "path": "",
+          "component": "MapPage",
+          "guards": [],
+          "description": "Interactive Leaflet map with property markers"
+        }
+      ]
+    },
+    "mortgageCalc": {
+      "path": "frontend/src/app/mortgage-calc/mortgage-calc-routing.module.ts",
+      "routes": [
+        {
+          "path": "",
+          "component": "MortgageCalcPage",
+          "guards": [],
+          "description": "Full mortgage calculator with charts"
+        }
+      ]
+    }
+  },
+  "routeGuards": {
+    "identified": [],
+    "notes": "No route guards found in the focused modules (properties, map, mortgage-calc). Guards may exist in user module for authentication."
+  },
+  "reactRouterEquivalent": {
+    "recommendation": "React Router v6",
+    "mappingNotes": [
+      "Angular lazy loading via loadChildren maps to React.lazy() with Suspense",
+      "Angular route parameters (:id) map directly to React Router useParams()",
+      "PreloadAllModules strategy can be implemented with custom preloading in React",
+      "IonicRouteStrategy for route reuse needs custom implementation in React"
+    ],
+    "suggestedStructure": {
+      "routes": [
+        { "path": "/", "element": "Navigate to /map" },
+        { "path": "/map", "element": "MapPage", "lazy": true },
+        { "path": "/properties", "element": "PropertiesPage", "lazy": true },
+        { "path": "/properties/:id", "element": "PropertiesDetail", "lazy": true },
+        { "path": "/mortgage-calc", "element": "MortgageCalcPage", "lazy": true }
+      ]
+    }
+  }
+}
