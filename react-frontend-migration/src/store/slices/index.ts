@@ -2,6 +2,7 @@ export { default as authReducer } from './authSlice';
 export { default as propertiesReducer } from './propertiesSlice';
 export { default as enquiriesReducer } from './enquiriesSlice';
 export { default as uiReducer } from './uiSlice';
+export { default as activitiesReducer } from './activitiesSlice';
 
 export {
   setCredentials,
@@ -47,3 +48,15 @@ export {
   removeNotification,
   clearNotifications,
 } from './uiSlice';
+
+export {
+  fetchActivities,
+  setActivities,
+  insertActivity,
+  setLoading as setActivitiesLoading,
+  setError as setActivitiesError,
+  resetState as resetActivitiesState,
+  selectActivities,
+  selectActivitiesLoading,
+  selectActivitiesError,
+} from './activitiesSlice';

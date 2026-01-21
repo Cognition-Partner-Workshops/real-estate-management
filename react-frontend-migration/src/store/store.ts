@@ -4,6 +4,7 @@ import {
   propertiesReducer,
   enquiriesReducer,
   uiReducer,
+  activitiesReducer,
 } from './slices';
 
 export const store = configureStore({
@@ -12,6 +13,7 @@ export const store = configureStore({
     properties: propertiesReducer,
     enquiries: enquiriesReducer,
     ui: uiReducer,
+    activities: activitiesReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
