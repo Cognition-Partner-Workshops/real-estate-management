@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 
 const notificationSchema = new mongoose.Schema(
   {
-    notification_id: { type: String, default: () => uuidv4(), unique: true },
+    notification_id: { type: String, default: () => uuidv4() },
     message: { type: String, required: true },
     type: {
       type: String,
