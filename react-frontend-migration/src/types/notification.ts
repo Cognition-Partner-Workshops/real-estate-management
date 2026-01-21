@@ -35,3 +35,8 @@ export interface UserNotification {
   expiresAt?: string;
   createdAt: string;
 }
+
+export interface WebSocketNotification {
+  type: SocketNotificationType;
+  payload: unknown;
+}
