@@ -13,6 +13,7 @@ const UserPage = lazy(() => import('@/pages/user/UserPage'));
 const ChangePasswordPage = lazy(() => import('@/pages/user/change-password/ChangePasswordPage'));
 const SignInPage = lazy(() => import('@/pages/user/auth/SignInPage'));
 const RegisterPage = lazy(() => import('@/pages/user/auth/RegisterPage'));
+const NotificationsPage = lazy(() => import('@/pages/user/notifications/NotificationsPage'));
 const AboutPage = lazy(() => import('@/pages/about/AboutPage'));
 
 function PageLoader(): ReactElement {
@@ -111,6 +112,14 @@ function LazyChangePasswordPage(): ReactElement {
   );
 }
 
+function LazyNotificationsPage(): ReactElement {
+  return (
+    <Suspense fallback={<PageLoader />}>
+      <NotificationsPage />
+    </Suspense>
+  );
+}
+
 export const routes: RouteObject[] = [
   {
     path: '/',
@@ -163,6 +172,10 @@ export const routes: RouteObject[] = [
       {
         path: 'about',
         element: <LazyAboutPage />,
+      },
+      {
+        path: 'user/notifications',
+        element: <LazyNotificationsPage />,
       },
     ],
   },
