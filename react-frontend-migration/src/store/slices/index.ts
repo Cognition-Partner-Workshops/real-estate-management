@@ -51,7 +51,20 @@ export {
   removeEnquiry,
   markAsRead,
   setLoading as setEnquiriesLoading,
+  setError as setEnquiriesError,
+  clearError as clearEnquiriesError,
   resetState as resetEnquiriesState,
+  fetchEnquiries,
+  fetchEnquiry,
+  createEnquiry,
+  deleteEnquiry,
+  readEnquiry,
+  selectEnquiries,
+  selectSelectedEnquiry,
+  selectEnquiriesLoading,
+  selectEnquiriesError,
+  selectInitialFetchDone,
+  selectUnreadEnquiriesCount,
 } from './enquiriesSlice';
 
 export {
