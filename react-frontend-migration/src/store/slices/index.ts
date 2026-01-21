@@ -2,6 +2,7 @@ export { default as authReducer } from './authSlice';
 export { default as propertiesReducer } from './propertiesSlice';
 export { default as enquiriesReducer } from './enquiriesSlice';
 export { default as uiReducer } from './uiSlice';
+export { default as notificationsReducer } from './notificationsSlice';
 
 export {
   setCredentials,
@@ -43,7 +44,16 @@ export {
   toggleDarkMode,
   setSidebarOpen,
   toggleSidebar,
-  addNotification,
-  removeNotification,
-  clearNotifications,
+  addNotification as addToast,
+  removeNotification as removeToast,
+  clearNotifications as clearToasts,
 } from './uiSlice';
+
+export {
+  setNotifications,
+  addNotification,
+  removeNotifications,
+  markNotificationsAsRead,
+  setLoading as setNotificationsLoading,
+  resetState as resetNotificationsState,
+} from './notificationsSlice';
