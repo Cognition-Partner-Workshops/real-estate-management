@@ -3,14 +3,19 @@ export interface Activity {
   action: string;
   description: string;
   property_id?: string;
+  enquiry_id?: string;
   createdAt: string;
 }
 
 export interface User {
   user_id: string;
   name: string;
+  fullName: string;
   email: string;
   avatar?: string;
+  about?: string;
+  address?: string;
+  verified?: boolean;
   properties?: string[];
   activities?: Activity[];
   createdAt?: string;
@@ -34,9 +39,9 @@ export interface RegisterPayload {
 }
 
 export interface UpdateUserPayload {
-  name?: string;
-  email?: string;
-  avatar?: string;
+  fullName?: string;
+  about?: string;
+  address?: string;
 }
 
 export interface ChangePasswordPayload {

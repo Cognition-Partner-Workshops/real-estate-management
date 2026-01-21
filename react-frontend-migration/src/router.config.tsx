@@ -9,7 +9,7 @@ const PropertyDetailPage = lazy(() => import('@/pages/properties/PropertyDetailP
 const EnquiriesPage = lazy(() => import('@/pages/enquiries/EnquiriesPage'));
 const MortgageCalcPage = lazy(() => import('@/pages/mortgage-calc/MortgageCalcPage'));
 const SettingsPage = lazy(() => import('@/pages/settings/SettingsPage'));
-const UserPage = lazy(() => import('@/pages/user/UserPage'));
+const ProfilePage = lazy(() => import('@/pages/user/profile/ProfilePage'));
 const ChangePasswordPage = lazy(() => import('@/pages/user/change-password/ChangePasswordPage'));
 const SignInPage = lazy(() => import('@/pages/user/auth/SignInPage'));
 const RegisterPage = lazy(() => import('@/pages/user/auth/RegisterPage'));
@@ -72,10 +72,10 @@ function LazySettingsPage(): ReactElement {
   );
 }
 
-function LazyUserPage(): ReactElement {
+function LazyProfilePage(): ReactElement {
   return (
     <Suspense fallback={<PageLoader />}>
-      <UserPage />
+      <ProfilePage />
     </Suspense>
   );
 }
@@ -155,7 +155,7 @@ export const routes: RouteObject[] = [
       },
       {
         path: 'user',
-        element: <LazyUserPage />,
+        element: <LazyProfilePage />,
       },
       {
         path: 'user/change-password',
