@@ -5,3 +5,4 @@ export { default as Card } from './Card';
 export { default as Select } from './Select';
 export { Skeleton, SkeletonCard } from './Skeleton';
 export { Badge, PropertyBadge } from './Badge';
+export { NotificationBadge } from './NotificationBadge';
