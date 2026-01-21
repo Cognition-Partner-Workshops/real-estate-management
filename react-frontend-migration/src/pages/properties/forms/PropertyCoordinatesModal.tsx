@@ -81,9 +81,9 @@ function PropertyCoordinatesModal({
       mapRef.current = null;
       markerRef.current = null;
       tileLayerRef.current = null;
-      setCoord(null);
     }
   }, [isOpen]);
+  
 
   const handleConfirm = (): void => {
     if (coord) {
