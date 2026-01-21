@@ -9,7 +9,11 @@ const PropertyDetailPage = lazy(() => import('@/pages/properties/PropertyDetailP
 const EnquiriesPage = lazy(() => import('@/pages/enquiries/EnquiriesPage'));
 const MortgageCalcPage = lazy(() => import('@/pages/mortgage-calc/MortgageCalcPage'));
 const SettingsPage = lazy(() => import('@/pages/settings/SettingsPage'));
-const UserPage = lazy(() => import('@/pages/user/UserPage'));
+const ProfilePage = lazy(() => import('@/pages/user/profile/ProfilePage'));
+const ChangePasswordPage = lazy(() => import('@/pages/user/change-password/ChangePasswordPage'));
+const SignInPage = lazy(() => import('@/pages/user/auth/SignInPage'));
+const RegisterPage = lazy(() => import('@/pages/user/auth/RegisterPage'));
+const NotificationsPage = lazy(() => import('@/pages/user/notifications/NotificationsPage'));
 const AboutPage = lazy(() => import('@/pages/about/AboutPage'));
 
 function PageLoader(): ReactElement {
@@ -68,10 +72,26 @@ function LazySettingsPage(): ReactElement {
   );
 }
 
-function LazyUserPage(): ReactElement {
+function LazyProfilePage(): ReactElement {
   return (
     <Suspense fallback={<PageLoader />}>
-      <UserPage />
+      <ProfilePage />
+    </Suspense>
+  );
+}
+
+function LazySignInPage(): ReactElement {
+  return (
+    <Suspense fallback={<PageLoader />}>
+      <SignInPage />
+    </Suspense>
+  );
+}
+
+function LazyRegisterPage(): ReactElement {
+  return (
+    <Suspense fallback={<PageLoader />}>
+      <RegisterPage />
     </Suspense>
   );
 }
@@ -80,6 +100,22 @@ function LazyAboutPage(): ReactElement {
   return (
     <Suspense fallback={<PageLoader />}>
       <AboutPage />
+    </Suspense>
+  );
+}
+
+function LazyChangePasswordPage(): ReactElement {
+  return (
+    <Suspense fallback={<PageLoader />}>
+      <ChangePasswordPage />
+    </Suspense>
+  );
+}
+
+function LazyNotificationsPage(): ReactElement {
+  return (
+    <Suspense fallback={<PageLoader />}>
+      <NotificationsPage />
     </Suspense>
   );
 }
@@ -119,11 +155,27 @@ export const routes: RouteObject[] = [
       },
       {
         path: 'user',
-        element: <LazyUserPage />,
+        element: <LazyProfilePage />,
+      },
+      {
+        path: 'user/change-password',
+        element: <LazyChangePasswordPage />,
+      },
+      {
+        path: 'user/signin',
+        element: <LazySignInPage />,
+      },
+      {
+        path: 'user/register',
+        element: <LazyRegisterPage />,
       },
       {
         path: 'about',
         element: <LazyAboutPage />,
+      },
+      {
+        path: 'user/notifications',
+        element: <LazyNotificationsPage />,
       },
     ],
   },
