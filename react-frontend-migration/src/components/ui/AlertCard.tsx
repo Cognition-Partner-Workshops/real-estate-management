@@ -1,6 +1,6 @@
 import type { ReactElement, ReactNode } from 'react';
 
-type AlertVariant = 'danger' | 'warning' | 'success';
+type AlertVariant = 'danger' | 'warning' | 'success' | 'error' | 'info';
 
 interface AlertCardProps {
   children?: ReactNode;
@@ -11,8 +11,10 @@ interface AlertCardProps {
 
 const variantStyles: Record<AlertVariant, string> = {
   danger: 'border-red-500 bg-red-500/35 text-red-700',
+  error: 'bg-red-50 border-red-200 text-red-700',
   warning: 'border-yellow-500 bg-yellow-500/30 text-yellow-700',
   success: 'border-green-500 bg-green-500/25 text-green-700',
+  info: 'bg-blue-50 border-blue-200 text-blue-700',
 };
 
 function AlertCard({
@@ -26,6 +28,7 @@ function AlertCard({
   return (
     <div
       className={`flex items-start gap-1.5 px-4 py-1.5 rounded-lg border ${variantStyles[variant]} ${className}`}
+      role="alert"
     >
       <div className="flex items-start">
         <svg
