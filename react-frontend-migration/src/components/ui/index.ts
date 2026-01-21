@@ -9,3 +9,4 @@ export { default as AlertCard } from './AlertCard';
 export { default as HorizontalSlide } from './HorizontalSlide';
 export { NotificationBadge } from './NotificationBadge';
 export { default as NeedSigninContinue } from './NeedSigninContinue';
+export { default as ModalSearch } from './ModalSearch';
