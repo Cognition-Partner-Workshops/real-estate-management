@@ -9,6 +9,7 @@ const PropertyDetailPage = lazy(() => import('@/pages/properties/PropertyDetailP
 const EnquiriesPage = lazy(() => import('@/pages/enquiries/EnquiriesPage'));
 const MortgageCalcPage = lazy(() => import('@/pages/mortgage-calc/MortgageCalcPage'));
 const SettingsPage = lazy(() => import('@/pages/settings/SettingsPage'));
+const UserPage = lazy(() => import('@/pages/user/UserPage'));
 const ProfilePage = lazy(() => import('@/pages/user/profile/ProfilePage'));
 const ChangePasswordPage = lazy(() => import('@/pages/user/change-password/ChangePasswordPage'));
 const SignInPage = lazy(() => import('@/pages/user/auth/SignInPage'));
@@ -68,6 +69,14 @@ function LazySettingsPage(): ReactElement {
   return (
     <Suspense fallback={<PageLoader />}>
       <SettingsPage />
+    </Suspense>
+  );
+}
+
+function LazyUserPage(): ReactElement {
+  return (
+    <Suspense fallback={<PageLoader />}>
+      <UserPage />
     </Suspense>
   );
 }
@@ -155,11 +164,21 @@ export const routes: RouteObject[] = [
       },
       {
         path: 'user',
-        element: <LazyProfilePage />,
-      },
-      {
-        path: 'user/change-password',
-        element: <LazyChangePasswordPage />,
+        element: <LazyUserPage />,
+        children: [
+          {
+            path: 'profile',
+            element: <LazyProfilePage />,
+          },
+          {
+            path: 'change-password',
+            element: <LazyChangePasswordPage />,
+          },
+          {
+            path: 'notifications',
+            element: <LazyNotificationsPage />,
+          },
+        ],
       },
       {
         path: 'user/signin',
@@ -172,10 +191,6 @@ export const routes: RouteObject[] = [
       {
         path: 'about',
         element: <LazyAboutPage />,
-      },
-      {
-        path: 'user/notifications',
-        element: <LazyNotificationsPage />,
       },
     ],
   },
