@@ -37,10 +37,10 @@ function sortByDate<T extends { createdAt?: string }>(
   });
 }
 
-function sortByName<T extends { subject?: string }>(items: T[]): T[] {
+function sortByName<T extends { title?: string }>(items: T[]): T[] {
   return [...items].sort((a, b) => {
-    const nameA = (a.subject || '').toLowerCase();
-    const nameB = (b.subject || '').toLowerCase();
+    const nameA = (a.title || '').toLowerCase();
+    const nameB = (b.title || '').toLowerCase();
     return nameA.localeCompare(nameB);
   });
 }
@@ -163,7 +163,7 @@ function EnquiriesListItem({
       <Card.Body className="pt-2">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-2 lg:gap-4">
           <div className="lg:col-span-4 text-base font-medium text-gray-800 dark:text-gray-200">
-            {enquiry.subject || 'None'}
+            {enquiry.title || 'None'}
           </div>
 
           <div className="lg:col-span-2">
@@ -276,8 +276,8 @@ function EnquiriesPage(): ReactElement {
   }, [filterParam]);
 
   const enquiries = useMemo((): Enquiry[] => {
-    if (!enquiriesResponse?.data) return [];
-    return enquiriesResponse.data;
+    if (!enquiriesResponse) return [];
+    return enquiriesResponse;
   }, [enquiriesResponse]);
 
   const filteredEnquiries = useMemo((): Enquiry[] => {
@@ -286,7 +286,7 @@ function EnquiriesPage(): ReactElement {
     if (search) {
       const textToFind = search.toLowerCase();
       result = result.filter((item) => {
-        const subject = (item.subject || '').toLowerCase();
+        const subject = (item.title || '').toLowerCase();
         const email = (item.users.from.email || '').toLowerCase();
         return subject.includes(textToFind) || email.includes(textToFind);
       });

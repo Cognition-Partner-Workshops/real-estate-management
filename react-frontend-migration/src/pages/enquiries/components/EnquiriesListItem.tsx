@@ -141,7 +141,7 @@ function EnquiriesListItem({ enquiry, onClick }: EnquiriesListItemProps): ReactE
       <div className="px-4 pb-4 lg:px-5 lg:pb-5">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-2 lg:gap-4 items-center">
           <div className="lg:col-span-4 text-base font-medium text-gray-800 dark:text-gray-200">
-            {enquiry.subject || 'None'}
+            {enquiry.title || 'None'}
           </div>
 
           <div className="lg:col-span-2">

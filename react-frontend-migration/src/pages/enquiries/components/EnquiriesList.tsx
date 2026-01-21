@@ -9,8 +9,8 @@ type SortOption = 'latest' | 'oldest' | 'title';
 
 function sortEnquiriesBySubject(items: Enquiry[], asc = true): Enquiry[] {
   return [...items].sort((a, b) => {
-    const aValue = (a.subject || '').toLowerCase();
-    const bValue = (b.subject || '').toLowerCase();
+    const aValue = (a.title || '').toLowerCase();
+    const bValue = (b.title || '').toLowerCase();
     if (!asc) {
       return aValue < bValue ? 1 : aValue > bValue ? -1 : 0;
     }
@@ -46,7 +46,7 @@ function EnquiriesList(): ReactElement {
     }
     const textToFind = searchText.toLowerCase();
     return items.filter((item) => {
-      const subject = (item.subject || '').toLowerCase();
+      const subject = (item.title || '').toLowerCase();
       const email = (item.users.from.email || '').toLowerCase();
       return subject.includes(textToFind) || email.includes(textToFind);
     });

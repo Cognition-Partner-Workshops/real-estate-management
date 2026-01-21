@@ -10,9 +10,10 @@ import { useRestriction } from '@/hooks/useRestriction';
 import type { Property, EnquiryTopic, CreateEnquiryPayload } from '@/types';
 
 interface EnquiryFormData {
-  subject: string;
+
+  title: string;
   email: string;
-  message: string;
+  content: string;
   topic: EnquiryTopic;
 }
 
@@ -52,9 +53,9 @@ function EnquiryNewForm({ property, userTo, replyTo }: EnquiryNewFormProps): Rea
   } = useForm<EnquiryFormData>({
     mode: 'onSubmit',
     defaultValues: {
-      subject: replyTo?.title || '',
+      title: replyTo?.title || '',
       email: '',
-      message: '',
+      content: '',
       topic: (replyTo?.topic as EnquiryTopic) || 'info',
     },
   });
@@ -73,12 +74,24 @@ function EnquiryNewForm({ property, userTo, replyTo }: EnquiryNewFormProps): Rea
     }
 
     const payload: CreateEnquiryPayload = {
-      subject: data.subject,
-      message: data.message,
+      title: data.title,
+      content: data.content,
+      email: data.email,
       topic: data.topic,
-      property_id: property.property_id,
-      to_user_id: userTo,
-      ...(replyTo ? { replyTo: replyTo.enquiry_id } : {}),
+      property: {
+        property_id: property.property_id,
+        name: property.name,
+      },
+      userTo: userTo,
+      ...(replyTo
+        ? {
+            replyTo: {
+              enquiry_id: replyTo.enquiry_id,
+              title: replyTo.title,
+              topic: replyTo.topic,
+            },
+          }
+        : {}),
     };
 
     try {
@@ -117,7 +130,7 @@ function EnquiryNewForm({ property, userTo, replyTo }: EnquiryNewFormProps): Rea
             <Input
               label="Title:"
               type="text"
-              {...register('subject', {
+              {...register('title', {
                 required: 'Title is required',
                 minLength: {
                   value: 8,
@@ -126,7 +139,7 @@ function EnquiryNewForm({ property, userTo, replyTo }: EnquiryNewFormProps): Rea
               })}
               className="dark:bg-gray-700 dark:text-white dark:border-gray-600"
             />
-            {showErrors && errors.subject && (
+            {showErrors && errors.title && (
               <div className="mt-2">
                 <AlertCard variant="error">Title is too short.</AlertCard>
               </div>
@@ -157,7 +170,7 @@ function EnquiryNewForm({ property, userTo, replyTo }: EnquiryNewFormProps): Rea
             <Textarea
               label="Message:"
               placeholder="Must be at least 8 characters long"
-              {...register('message', {
+              {...register('content', {
                 required: 'Message is required',
                 minLength: {
                   value: 8,
@@ -166,7 +179,7 @@ function EnquiryNewForm({ property, userTo, replyTo }: EnquiryNewFormProps): Rea
               })}
               className="dark:bg-gray-700 dark:text-white dark:border-gray-600"
             />
-            {showErrors && errors.message && (
+            {showErrors && errors.content && (
               <div className="mt-2">
                 <AlertCard variant="error">Message content is too short.</AlertCard>
               </div>

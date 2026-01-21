@@ -86,12 +86,21 @@ function EnquiriesNewForm({
     }
 
     const payload: CreateEnquiryPayload = {
-      subject: data.title,
-      message: data.content,
+      title: data.title,
+      content: data.content,
+      email: data.email,
       topic: data.topic as CreateEnquiryPayload['topic'],
-      to_user_id: userTo,
-      ...(property?.property_id && { property_id: property.property_id }),
-      ...(replyTo && { replyTo: replyTo.enquiry_id }),
+      userTo: userTo,
+      property: property?.property_id
+        ? { property_id: property.property_id, name: property.name || '' }
+        : { property_id: '', name: '' },
+      ...(replyTo && {
+        replyTo: {
+          enquiry_id: replyTo.enquiry_id,
+          title: replyTo.title,
+          topic: replyTo.topic,
+        },
+      }),
     };
 
     try {
