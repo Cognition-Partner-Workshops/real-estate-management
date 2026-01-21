@@ -1,18 +1,20 @@
 import type { ReactElement } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import { PropertyBadge } from '@/components/ui';
 import type { Property } from '@/types';
 
 interface MapPopupProps {
   property: Property;
+  onViewMore?: (propertyId: string) => void;
 }
 
-function MapPopup({ property }: MapPopupProps): ReactElement {
-  const navigate = useNavigate();
-
+function MapPopup({ property, onViewMore }: MapPopupProps): ReactElement {
   const handleViewMore = (): void => {
-    navigate(`/properties/${property.property_id}`);
+    if (onViewMore) {
+      onViewMore(property.property_id);
+    } else {
+      window.location.href = `/properties/${property.property_id}`;
+    }
   };
 
   return (
