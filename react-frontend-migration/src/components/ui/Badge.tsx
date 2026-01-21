@@ -1,5 +1,5 @@
 import type { ReactElement } from 'react';
-import { PropertyType, EnquiryTopic } from '@/types';
+import { EnquiryTopic } from '@/types';
 
 type BadgeVariant = 'default' | 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info';
 
@@ -25,28 +25,6 @@ function Badge({ children, variant = 'default', className = '' }: BadgeProps): R
       className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${variantStyles[variant]} ${className}`}
     >
       {children}
-    </span>
-  );
-}
-
-interface PropertyBadgeProps {
-  type: PropertyType;
-  className?: string;
-}
-
-const propertyTypeColors: Record<PropertyType, string> = {
-  [PropertyType.Residential]: 'bg-green-100 text-green-800',
-  [PropertyType.Commercial]: 'bg-blue-100 text-blue-800',
-  [PropertyType.Industrial]: 'bg-yellow-100 text-yellow-800',
-  [PropertyType.Land]: 'bg-purple-100 text-purple-800',
-};
-
-function PropertyBadge({ type, className = '' }: PropertyBadgeProps): ReactElement {
-  return (
-    <span
-      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize ${propertyTypeColors[type]} ${className}`}
-    >
-      {type}
     </span>
   );
 }
@@ -80,5 +58,5 @@ function EnquiryBadge({ topic, className = '' }: EnquiryBadgeProps): ReactElemen
   );
 }
 
-export { Badge, PropertyBadge, EnquiryBadge };
+export { Badge, EnquiryBadge };
 export default Badge;
