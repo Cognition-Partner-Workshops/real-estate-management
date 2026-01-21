@@ -1,4 +1,4 @@
-export { default as authReducer } from './authSlice';
+export { default as userReducer } from './userSlice';
 export { default as propertiesReducer } from './propertiesSlice';
 export { default as enquiriesReducer } from './enquiriesSlice';
 export { default as uiReducer } from './uiSlice';
@@ -8,9 +8,23 @@ export { default as activitiesReducer } from './activitiesSlice';
 export {
   setCredentials,
   setUser,
-  setLoading as setAuthLoading,
+  setLoading as setUserLoading,
+  setError as setUserError,
+  clearError as clearUserError,
   logout,
-} from './authSlice';
+  signIn,
+  register,
+  googleAuth,
+  getCurrentUser,
+  updateUser,
+  changePassword,
+  selectUser,
+  selectAccessToken,
+  selectIsAuthenticated,
+  selectIsLoading as selectUserIsLoading,
+  selectError as selectUserError,
+  selectIsPropertyOwner,
+} from './userSlice';
 
 export {
   setProperties,

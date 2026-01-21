@@ -17,7 +17,7 @@ const queryClient = new QueryClient({
   },
 });
 
-setTokenGetter(() => store.getState().auth.accessToken);
+setTokenGetter(() => store.getState().user.accessToken);
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
