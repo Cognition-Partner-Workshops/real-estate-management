@@ -4,3 +4,4 @@ export * from './useEnquiries';
 export * from './useStorage';
 export * from './useRestriction';
 export * from './useWebSocket';
+export * from './useMapService';
