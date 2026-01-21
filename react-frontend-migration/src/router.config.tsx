@@ -10,6 +10,7 @@ const EnquiriesPage = lazy(() => import('@/pages/enquiries/EnquiriesPage'));
 const MortgageCalcPage = lazy(() => import('@/pages/mortgage-calc/MortgageCalcPage'));
 const SettingsPage = lazy(() => import('@/pages/settings/SettingsPage'));
 const UserPage = lazy(() => import('@/pages/user/UserPage'));
+const ChangePasswordPage = lazy(() => import('@/pages/user/change-password/ChangePasswordPage'));
 const AboutPage = lazy(() => import('@/pages/about/AboutPage'));
 
 function PageLoader(): ReactElement {
@@ -84,6 +85,14 @@ function LazyAboutPage(): ReactElement {
   );
 }
 
+function LazyChangePasswordPage(): ReactElement {
+  return (
+    <Suspense fallback={<PageLoader />}>
+      <ChangePasswordPage />
+    </Suspense>
+  );
+}
+
 export const routes: RouteObject[] = [
   {
     path: '/',
@@ -117,14 +126,18 @@ export const routes: RouteObject[] = [
         path: 'settings',
         element: <LazySettingsPage />,
       },
-      {
-        path: 'user',
-        element: <LazyUserPage />,
-      },
-      {
-        path: 'about',
-        element: <LazyAboutPage />,
-      },
+            {
+              path: 'user',
+              element: <LazyUserPage />,
+            },
+            {
+              path: 'user/change-password',
+              element: <LazyChangePasswordPage />,
+            },
+            {
+              path: 'about',
+              element: <LazyAboutPage />,
+            },
     ],
   },
 ];
