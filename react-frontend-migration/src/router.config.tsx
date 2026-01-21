@@ -10,6 +10,7 @@ const EnquiriesPage = lazy(() => import('@/pages/enquiries/EnquiriesPage'));
 const MortgageCalcPage = lazy(() => import('@/pages/mortgage-calc/MortgageCalcPage'));
 const SettingsPage = lazy(() => import('@/pages/settings/SettingsPage'));
 const UserPage = lazy(() => import('@/pages/user/UserPage'));
+const NotificationsPage = lazy(() => import('@/pages/user/notifications/NotificationsPage'));
 const AboutPage = lazy(() => import('@/pages/about/AboutPage'));
 
 function PageLoader(): ReactElement {
@@ -84,6 +85,14 @@ function LazyAboutPage(): ReactElement {
   );
 }
 
+function LazyNotificationsPage(): ReactElement {
+  return (
+    <Suspense fallback={<PageLoader />}>
+      <NotificationsPage />
+    </Suspense>
+  );
+}
+
 export const routes: RouteObject[] = [
   {
     path: '/',
@@ -124,6 +133,10 @@ export const routes: RouteObject[] = [
       {
         path: 'about',
         element: <LazyAboutPage />,
+      },
+      {
+        path: 'user/notifications',
+        element: <LazyNotificationsPage />,
       },
     ],
   },
