@@ -68,28 +68,28 @@ const markerIcons: Record<PropertyType, L.Icon> = {
 };
 
 interface MapControllerProps {
-  center: Coord;
   targetCoord: Coord | null;
   onFlyComplete: () => void;
 }
 
-function MapController({ center, targetCoord, onFlyComplete }: MapControllerProps): null {
+function MapController({ targetCoord, onFlyComplete }: MapControllerProps): null {
   const map = useMap();
-  const hasInitialized = useRef<boolean>(false);
+  const lastTargetCoord = useRef<Coord | null>(null);
 
   useEffect(() => {
-    if (targetCoord) {
+    if (targetCoord && targetCoord !== lastTargetCoord.current) {
+      lastTargetCoord.current = targetCoord;
       map.flyTo([targetCoord.lat, targetCoord.lng], FLY_TO_ZOOM);
-      onFlyComplete();
+      const handleMoveEnd = (): void => {
+        onFlyComplete();
+      };
+      map.once('moveend', handleMoveEnd);
+      return () => {
+        map.off('moveend', handleMoveEnd);
+      };
     }
+    return undefined;
   }, [map, targetCoord, onFlyComplete]);
-
-  useEffect(() => {
-    if (!hasInitialized.current) {
-      hasInitialized.current = true;
-      map.setView([center.lat, center.lng], DEFAULT_ZOOM);
-    }
-  }, [map, center]);
 
   return null;
 }
@@ -422,7 +422,6 @@ function MapPage(): ReactElement {
           >
             <TileLayer url={tileUrl} attribution={TILE_ATTRIBUTION} />
             <MapController
-              center={center}
               targetCoord={targetCoord}
               onFlyComplete={handleFlyComplete}
             />
