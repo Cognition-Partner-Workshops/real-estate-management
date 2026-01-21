@@ -106,7 +106,7 @@ export function useWebSocket(): UseWebSocketReturn {
           currentDispatch(
             addToast({
               type: 'info',
-              message: `New enquiry: ${enquiry.subject}`,
+              message: `New enquiry: ${enquiry.title}`,
             })
           );
           break;
