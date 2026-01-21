@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import {
-  authReducer,
+  userReducer,
   propertiesReducer,
   enquiriesReducer,
   uiReducer,
@@ -8,7 +8,7 @@ import {
 
 export const store = configureStore({
   reducer: {
-    auth: authReducer,
+    user: userReducer,
     properties: propertiesReducer,
     enquiries: enquiriesReducer,
     ui: uiReducer,
