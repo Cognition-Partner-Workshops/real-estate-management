@@ -66,8 +66,9 @@ export {
 
 export {
   setNotifications,
-  addNotification,
-  removeNotifications,
+  addNotificationToList,
+  removeNotificationFromList,
+  removeNotificationsFromList,
   markNotificationsAsRead,
   setLoading as setNotificationsLoading,
   resetState as resetNotificationsState,

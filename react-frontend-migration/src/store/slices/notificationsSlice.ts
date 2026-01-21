@@ -1,8 +1,8 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import type { Notification } from '@/types';
+import type { UserNotification } from '@/types';
 
 interface NotificationsState {
-  notifications: Notification[];
+  notifications: UserNotification[];
   isLoading: boolean;
   initialFetchDone: boolean;
 }
@@ -17,16 +17,21 @@ const notificationsSlice = createSlice({
   name: 'notifications',
   initialState,
   reducers: {
-    setNotifications: (state, action: PayloadAction<Notification[]>) => {
+    setNotifications: (state, action: PayloadAction<UserNotification[]>) => {
       state.notifications = action.payload;
       state.initialFetchDone = true;
     },
-    addNotification: (state, action: PayloadAction<Notification>) => {
+    addNotificationToList: (state, action: PayloadAction<UserNotification>) => {
       state.notifications = [action.payload, ...state.notifications];
     },
-    removeNotifications: (state, action: PayloadAction<string[]>) => {
+    removeNotificationFromList: (state, action: PayloadAction<string>) => {
       state.notifications = state.notifications.filter(
-        (notification) => !action.payload.includes(notification.notification_id)
+        (n) => n.notification_id !== action.payload
+      );
+    },
+    removeNotificationsFromList: (state, action: PayloadAction<string[]>) => {
+      state.notifications = state.notifications.filter(
+        (n) => !action.payload.includes(n.notification_id)
       );
     },
     markNotificationsAsRead: (state, action: PayloadAction<string[]>) => {
@@ -41,6 +46,7 @@ const notificationsSlice = createSlice({
     },
     resetState: (state) => {
       state.notifications = [];
+      state.isLoading = false;
       state.initialFetchDone = false;
     },
   },
@@ -48,8 +54,9 @@ const notificationsSlice = createSlice({
 
 export const {
   setNotifications,
-  addNotification,
-  removeNotifications,
+  addNotificationToList,
+  removeNotificationFromList,
+  removeNotificationsFromList,
   markNotificationsAsRead,
   setLoading,
   resetState,

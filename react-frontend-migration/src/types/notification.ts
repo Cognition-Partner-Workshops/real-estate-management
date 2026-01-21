@@ -26,3 +26,12 @@ export interface Notification {
   expiresAt?: string;
   createdAt: string;
 }
+
+export interface UserNotification {
+  notification_id: string;
+  message: string;
+  type: UserNotificationType;
+  read: boolean;
+  expiresAt?: string;
+  createdAt: string;
+}

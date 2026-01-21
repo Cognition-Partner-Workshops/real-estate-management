@@ -15,3 +15,4 @@ export { NotificationBadge } from './NotificationBadge';
 export { default as NeedSigninContinue } from './NeedSigninContinue';
 export { default as ModalSearch } from './ModalSearch';
 export { default as Footer } from './Footer';
+export { NotificationBell } from './NotificationBell';
