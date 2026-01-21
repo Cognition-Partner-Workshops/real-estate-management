@@ -1,14 +1,30 @@
-export { default as authReducer } from './authSlice';
+export { default as userReducer } from './userSlice';
 export { default as propertiesReducer } from './propertiesSlice';
 export { default as enquiriesReducer } from './enquiriesSlice';
 export { default as uiReducer } from './uiSlice';
+export { default as notificationsReducer } from './notificationsSlice';
+export { default as activitiesReducer } from './activitiesSlice';
 
 export {
   setCredentials,
   setUser,
-  setLoading as setAuthLoading,
+  setLoading as setUserLoading,
+  setError as setUserError,
+  clearError as clearUserError,
   logout,
-} from './authSlice';
+  signIn,
+  register,
+  googleAuth,
+  getCurrentUser,
+  updateUser,
+  changePassword,
+  selectUser,
+  selectAccessToken,
+  selectIsAuthenticated,
+  selectIsLoading as selectUserIsLoading,
+  selectError as selectUserError,
+  selectIsPropertyOwner,
+} from './userSlice';
 
 export {
   setProperties,
@@ -43,7 +59,29 @@ export {
   toggleDarkMode,
   setSidebarOpen,
   toggleSidebar,
-  addNotification,
-  removeNotification,
-  clearNotifications,
+  addNotification as addToast,
+  removeNotification as removeToast,
+  clearNotifications as clearToasts,
 } from './uiSlice';
+
+export {
+  setNotifications,
+  addNotificationToList,
+  removeNotificationFromList,
+  removeNotificationsFromList,
+  markNotificationsAsRead,
+  setLoading as setNotificationsLoading,
+  resetState as resetNotificationsState,
+} from './notificationsSlice';
+
+export {
+  fetchActivities,
+  setActivities,
+  insertActivity,
+  setLoading as setActivitiesLoading,
+  setError as setActivitiesError,
+  resetState as resetActivitiesState,
+  selectActivities,
+  selectActivitiesLoading,
+  selectActivitiesError,
+} from './activitiesSlice';

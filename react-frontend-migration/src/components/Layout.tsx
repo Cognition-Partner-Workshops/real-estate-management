@@ -1,5 +1,6 @@
 import type { ReactElement } from 'react';
 import { Outlet, NavLink } from 'react-router-dom';
+import { Footer } from '@/components/ui';
 
 function Layout(): ReactElement {
   const navLinkClass = ({ isActive }: { isActive: boolean }): string =>
@@ -43,6 +44,7 @@ function Layout(): ReactElement {
       <main className="flex-1">
         <Outlet />
       </main>
+      <Footer />
     </div>
   );
 }

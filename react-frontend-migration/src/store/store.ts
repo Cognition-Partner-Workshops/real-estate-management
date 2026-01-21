@@ -1,17 +1,21 @@
 import { configureStore } from '@reduxjs/toolkit';
 import {
-  authReducer,
+  userReducer,
   propertiesReducer,
   enquiriesReducer,
   uiReducer,
+  notificationsReducer,
+  activitiesReducer,
 } from './slices';
 
 export const store = configureStore({
   reducer: {
-    auth: authReducer,
+    user: userReducer,
     properties: propertiesReducer,
     enquiries: enquiriesReducer,
     ui: uiReducer,
+    notifications: notificationsReducer,
+    activities: activitiesReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
