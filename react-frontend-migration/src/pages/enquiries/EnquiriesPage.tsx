@@ -1,10 +1,25 @@
-import type { ReactElement } from 'react';
+import { useEffect, type ReactElement } from 'react';
+import { useAppDispatch, useAppSelector } from '@/store';
+import { fetchEnquiries, selectInitialFetchDone } from '@/store/slices/enquiriesSlice';
+import { EnquiriesList } from './components';
 
 function EnquiriesPage(): ReactElement {
+  const dispatch = useAppDispatch();
+  const initialFetchDone = useAppSelector(selectInitialFetchDone);
+  const isAuthenticated = useAppSelector((state) => state.user.isAuthenticated);
+
+  useEffect(() => {
+    if (isAuthenticated && !initialFetchDone) {
+      dispatch(fetchEnquiries());
+    }
+  }, [dispatch, isAuthenticated, initialFetchDone]);
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-4">
-      <h1 className="text-3xl font-bold text-gray-800 mb-4">Enquiries</h1>
-      <p className="text-gray-600">Enquiry management with filtering - Coming soon</p>
+    <div className="py-4">
+      <div className="px-3 md:px-5 mb-4">
+        <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-200">Enquiries</h1>
+      </div>
+      <EnquiriesList />
     </div>
   );
 }
