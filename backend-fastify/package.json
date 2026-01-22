@@ -17,6 +17,7 @@
   "author": "eevan7a9",
   "license": "ISC",
   "dependencies": {
+    "@aws-sdk/client-secrets-manager": "^3.972.0",
     "@fastify/busboy": "^2.1.1",
     "@fastify/cors": "^8.5.0 ",
     "@fastify/jwt": "^8.0.0",

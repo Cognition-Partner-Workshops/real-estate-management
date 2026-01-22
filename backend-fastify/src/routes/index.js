@@ -4,6 +4,7 @@ import { propertiesRoutes } from "./properties/index.js";
 import { enquiriesRoutes } from "./enquiries/index.js";
 import { activitiesRoutes } from "./activity/index.js";
 import { notificationsRoutes } from "./notifications/index.js";
+import { configRoutes } from "./config/index.js";
 
 /**
  * 
@@ -20,4 +21,5 @@ export const setFastifyRoutes = function (fastify) {
   fastify.register(enquiriesRoutes, { prefix: "/enquiries" });
   fastify.register(activitiesRoutes, { prefix: "/activities"});
   fastify.register(notificationsRoutes, { prefix: "/notifications"});
+  fastify.register(configRoutes, { prefix: "/config"});
 };

@@ -127,13 +127,50 @@ cd backend-fastify/
 ### **1.2 create `.env` file & add variables:**
 - copy `.env.example` & re-name it to `.env`
 - set your desired variable value
+
+#### Option A: Using AWS Secrets Manager (Recommended for Production)
+Configure AWS Secrets Manager to securely manage your secrets:
 ```
 PORT=8000
 LOGGER=true
 SALT=12
-SECRET_KEY='secret'
-DB_CONNECT=mongodb://localhost:27017/rem-db
+USER_ACTIVITIES_MAX=20
+USER_NOTIFICATIONS_MAX=30
+
+# AWS Secrets Manager Configuration
+AWS_REGION=us-east-1
+AWS_SECRET_NAME=real-estate-management/secrets
 ```
+
+Create a secret in AWS Secrets Manager with the following JSON structure:
+```json
+{
+  "SECRET_KEY": "your-secure-jwt-secret-key",
+  "DB_CONNECT": "mongodb://your-mongodb-connection-string",
+  "GOOGLE_AUTH_CLIENT_ID": "your-client-id.apps.googleusercontent.com",
+  "MAP_KEY": "your-map-api-key",
+  "WEBSOCKET_URL": "ws://your-domain/websocket"
+}
+```
+
+Required IAM permissions:
+- `secretsmanager:GetSecretValue` on the secret ARN
+
+#### Option B: Using Environment Variables (Development)
+For local development, you can use environment variables directly:
+```
+PORT=8000
+LOGGER=true
+SALT=12
+SECRET_KEY='your-secure-jwt-secret'
+DB_CONNECT=mongodb://localhost:27017/rem-db
+GOOGLE_AUTH_CLIENT_ID='your-client-id.apps.googleusercontent.com'
+MAP_KEY=''
+WEBSOCKET_URL='ws://localhost:8000/websocket'
+```
+
+**WARNING:** Never use the default 'secret' value for SECRET_KEY in production.
+
 ### **2. then install dependencies & run dev**
 
 In terminal - command
