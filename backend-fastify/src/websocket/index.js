@@ -1,6 +1,7 @@
 import fastifyWebsocket from "@fastify/websocket";
-import { fastify } from "../index.js";
 import { userIdToken } from "../utils/users.js";
+
+let fastifyInstance = null;
 
 /**
  * Parse message of weboscket.
@@ -22,7 +23,11 @@ const parseMessage = function (message) {
  * @param {String|String[]} targetUserId - A string or an array of user IDs to send the notification to.
  */
 export const sendTargetedNotification = function (type, payload, targetUserId) {
-  fastify.websocketServer.clients.forEach((client) => {
+  if (!fastifyInstance || !fastifyInstance.websocketServer) {
+    console.warn("WebSocket server not initialized");
+    return;
+  }
+  fastifyInstance.websocketServer.clients.forEach((client) => {
     if (
       Array.isArray(targetUserId)
         ? targetUserId.includes(client.userId)
@@ -39,15 +44,21 @@ export const sendTargetedNotification = function (type, payload, targetUserId) {
  * @param {String} type - The type of notification to send.
  */
 export const sendGeneralNotification = function (type, payload) {
-  fastify.websocketServer.clients.forEach((client) => {
+  if (!fastifyInstance || !fastifyInstance.websocketServer) {
+    console.warn("WebSocket server not initialized");
+    return;
+  }
+  fastifyInstance.websocketServer.clients.forEach((client) => {
     client.send(JSON.stringify({ type, payload }));
   });
 };
 
 /**
  * Sets up WebSocket functionality for the Fastify instance.
+ * @param {import('fastify').FastifyInstance} fastify - The Fastify instance
  */
-export const setFastifyWebsocket = function () {
+export const setFastifyWebsocket = function (fastify) {
+  fastifyInstance = fastify;
   /**
    * @param {fastifyWebsocket} socket - The WebSocket connection
    * @param {FastifyRequest} req - The Fastify request object

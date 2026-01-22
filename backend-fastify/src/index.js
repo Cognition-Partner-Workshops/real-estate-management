@@ -70,7 +70,7 @@ async function startServer() {
   // We register routes
   setFastifyRoutes(fastify);
   // We set webSocket connection
-  setFastifyWebsocket();
+  setFastifyWebsocket(fastify);
 
   mongoose
     .connect(dbConnect, {
