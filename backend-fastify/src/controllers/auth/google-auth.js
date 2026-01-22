@@ -1,5 +1,6 @@
 import { fastify } from "../../index.js";
 import { User } from "../../models/user.js";
+import { getSecret } from "../../config/secrets.js";
 
 export const googleAuth = async function (req, res) {
   /**
@@ -13,7 +14,8 @@ export const googleAuth = async function (req, res) {
   }
   const { sub, email, name: fullName, aud, iss, exp, picture } = fastify.jwt.decode(credential);
 
-  if (process.env.GOOGLE_AUTH_CLIENT_ID !== aud) {
+  const googleAuthClientId = await getSecret("GOOGLE_AUTH_CLIENT_ID");
+  if (googleAuthClientId !== aud) {
     // Invalid client id && invalid
     return res.status(400).send({ message: "Error: Invalid Request." });
   }

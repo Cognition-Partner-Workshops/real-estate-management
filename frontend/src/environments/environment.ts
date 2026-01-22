@@ -2,6 +2,10 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+// Note: mapKey, googleAuthClientId, and webSocketUrl are now fetched dynamically
+// from the backend via ConfigService. The values below serve as fallbacks only.
+// See: frontend/src/app/shared/services/config/config.service.ts
+
 export const environment = {
   production: false,
   api: {
