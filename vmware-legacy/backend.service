@@ -1,0 +1,37 @@
+[Unit]
+Description=Real Estate Management Backend API
+Documentation=https://github.com/eevan7a9/real-estate-management
+After=network.target mongod.service
+Wants=mongod.service
+
+[Service]
+Type=simple
+User=remapp
+Group=remapp
+WorkingDirectory=/opt/real-estate-management/backend
+ExecStart=/usr/bin/node src/index.js
+Restart=on-failure
+RestartSec=10
+
+# Environment
+Environment=NODE_ENV=production
+EnvironmentFile=/opt/real-estate-management/backend/.env
+
+# Logging
+StandardOutput=append:/var/log/real-estate-management/backend.log
+StandardError=append:/var/log/real-estate-management/backend-error.log
+
+# Security hardening
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/real-estate-management/backend/uploads
+ReadWritePaths=/var/log/real-estate-management
+
+# Resource limits
+LimitNOFILE=65535
+MemoryMax=512M
+
+[Install]
+WantedBy=multi-user.target
