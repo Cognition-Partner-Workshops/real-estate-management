@@ -1,0 +1,7 @@
+{
+  "repo_notes": [
+    {
+      "content": "The vmware-legacy/ folder contains critical deployment infrastructure that must be documented. It includes VM provisioning scripts (vm-setup.sh), systemd service files (backend.service), nginx configuration, and manual SSH-based deployment scripts (deploy-backend.sh, deploy-frontend.sh). The RUNBOOK.md provides step-by-step manual deployment procedures. This legacy infrastructure represents the 'before' state for a VMWare to GCP Cloud Run migration demo."
+    }
+  ]
+}
