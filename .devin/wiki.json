@@ -3,5 +3,311 @@
     {
       "content": "The vmware-legacy/ folder contains critical deployment infrastructure that must be documented. It includes VM provisioning scripts (vm-setup.sh), systemd service files (backend.service), nginx configuration, and manual SSH-based deployment scripts (deploy-backend.sh, deploy-frontend.sh). The RUNBOOK.md provides step-by-step manual deployment procedures. This legacy infrastructure represents the 'before' state for a VMWare to GCP Cloud Run migration demo."
     }
+  ],
+  "pages": [
+    {
+      "title": "Overview",
+      "purpose": "Introduce the real estate management system, describing its purpose as a property listing and enquiry platform with both Angular and React frontends, and summarizing the major components and features",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "System Architecture",
+      "purpose": "Describe the overall system architecture, including the three-tier structure (frontend, backend, database), communication patterns (REST API and WebSocket), and how major components interact",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Frontend Architecture",
+      "purpose": "Detail the Angular/Ionic frontend architecture, including module organization, lazy loading strategy, service layer patterns, and state management using RxJS and Signals",
+      "parent": "System Architecture",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Backend Architecture",
+      "purpose": "Explain the Fastify backend architecture, including plugin system, middleware stack, route organization, controller patterns, and Mongoose integration",
+      "parent": "System Architecture",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Data Models & Interfaces",
+      "purpose": "Document the core data structures including Property, Enquiry, User, Activity, and Notification interfaces, showing both TypeScript definitions and Mongoose schemas",
+      "parent": "System Architecture",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Authentication & Authorization Flow",
+      "purpose": "Describe the JWT-based authentication system, token generation and verification, password hashing with bcrypt, and how protected routes are secured",
+      "parent": "System Architecture",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Real-time Communication",
+      "purpose": "Explain the WebSocket architecture for real-time updates, including connection management, message routing, and how notifications are pushed to connected clients",
+      "parent": "System Architecture",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Frontend Application (Angular)",
+      "purpose": "Overview of the Angular/Ionic frontend application, its feature modules, shared services, and overall user experience design",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Application Core & Initialization",
+      "purpose": "Document the AppComponent, application initialization sequence, navigation structure, global state management, and integration of UserService, WebSocketService, and StorageService",
+      "parent": "Frontend Application (Angular)",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Properties Feature",
+      "purpose": "Overview of the complete properties management system, including listing, viewing, creating, editing, and deleting property listings",
+      "parent": "Frontend Application (Angular)",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Properties Service & List Management",
+      "purpose": "Detail the PropertiesService for state management and API interaction, PropertiesListComponent for rendering and infinite scrolling, and the search/filter/sort functionality",
+      "parent": "Frontend Application (Angular)",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Property Details View",
+      "purpose": "Explain the PropertiesDetailComponent, including property display, owner verification, image gallery, action popover, and integration with enquiries and mortgage calculator",
+      "parent": "Frontend Application (Angular)",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Property Creation & Editing",
+      "purpose": "Document the PropertiesNewComponent and PropertiesEditComponent, including multi-step forms, validation, coordinate selection via map modal, and image upload workflow",
+      "parent": "Frontend Application (Angular)",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Enquiries Feature",
+      "purpose": "Overview of the enquiry communication system allowing users to send and receive messages about properties, including reply threading",
+      "parent": "Frontend Application (Angular)",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Enquiries List & Management",
+      "purpose": "Detail the EnquiriesService, EnquiriesPage with search/filter/sort controls, EnquiriesListComponent, and URL-based state management",
+      "parent": "Frontend Application (Angular)",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Enquiry Details & Communication",
+      "purpose": "Explain the EnquiriesDetailComponent for viewing enquiry threads, marking as read, replying via modal, and the EnquiriesNewFormComponent for creating enquiries",
+      "parent": "Frontend Application (Angular)",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Map Feature",
+      "purpose": "Document the map-based property browsing interface using Leaflet, including property markers, legend filtering, search functionality, and deep linking to specific properties",
+      "parent": "Frontend Application (Angular)",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Mortgage Calculator",
+      "purpose": "Explain the mortgage calculation tool, including the MortgageCoreCalcComponent for payment calculations, amortization schedule generation, and visualization via pie and line charts",
+      "parent": "Frontend Application (Angular)",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "User Management & Authentication",
+      "purpose": "Detail the UserService for authentication and profile management, sign-in/registration flows, StorageService for session persistence, NotificationsService, and settings management including theme switching",
+      "parent": "Frontend Application (Angular)",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "React Frontend Migration",
+      "purpose": "Document the React-based frontend implementation, including router configuration, custom hooks (useWebSocket, useEnquiries), React Query integration, and comparison with the Angular implementation",
+      "parent": "Frontend Application (Angular)",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Backend API",
+      "purpose": "Overview of the Fastify-based REST API, including route organization, controller patterns, database integration, and authentication middleware",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Server Setup & Configuration",
+      "purpose": "Explain the Fastify server initialization in index.js, plugin registration (JWT, Bcrypt, Multipart, WebSocket, CORS), environment variable configuration, and MongoDB connection setup",
+      "parent": "Backend API",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Properties API",
+      "purpose": "Document the properties endpoints, controller functions for CRUD operations, image upload handling, cursor-based pagination, and the Property Mongoose schema",
+      "parent": "Backend API",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Enquiries API",
+      "purpose": "Detail the enquiries endpoints, controller logic for creating/reading/updating/deleting enquiries, marking as read, and the Enquiry Mongoose schema including reply threading and user tracking",
+      "parent": "Backend API",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Authentication & Users API",
+      "purpose": "Explain authentication endpoints (sign-in, register, Google auth), the authenticate decorator for route protection, password hashing with bcrypt, and user profile management endpoints",
+      "parent": "Backend API",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Notifications & Activities",
+      "purpose": "Document the notifications and activities systems, including endpoints for fetching/marking read/deleting, activity logging utilities, and WebSocket integration for real-time delivery",
+      "parent": "Backend API",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Build System & Development",
+      "purpose": "Overview of the build tooling, development workflow, and environment setup for both frontend and backend",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Frontend Build & Configuration",
+      "purpose": "Detail the Angular CLI configuration, Ionic integration, Tailwind CSS setup, TypeScript compilation, build optimization strategies, and development server configuration",
+      "parent": "Build System & Development",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Backend Setup & Environment",
+      "purpose": "Explain the backend dependencies, environment variable configuration (.env file), MongoDB setup, file upload directory structure, and version control exclusions (.gitignore)",
+      "parent": "Build System & Development",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Development Workflow",
+      "purpose": "Describe the development setup process, running frontend and backend servers concurrently, hot-reloading capabilities, testing approaches, and deployment considerations",
+      "parent": "Build System & Development",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {  
+      "title": "VMware Legacy Integration",  
+      "purpose": "Document the legacy VMware integration code in the vmware-legacy/ directory",  
+      "page_notes": [  
+        {  
+          "content": "This page should cover the vmware-legacy/ directory structure and its purpose..."  
+        }  
+      ]  
+    }  
   ]
 }
