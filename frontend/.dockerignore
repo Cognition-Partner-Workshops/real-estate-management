@@ -1,0 +1,56 @@
+# Dependencies
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Build output (will be generated during build)
+www
+dist
+
+# Environment files
+.env
+.env.*
+
+# Development files
+.git
+.gitignore
+.dockerignore
+Dockerfile
+README.md
+
+# IDE and editor files
+.idea
+.vscode
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test files
+*.test.ts
+*.spec.ts
+__tests__
+coverage
+karma.conf.js
+tsconfig.spec.json
+
+# Angular cache
+.angular
+
+# Capacitor/Mobile (not needed for web deployment)
+android
+ios
+capacitor.config.json
+capacitor.config.ts
+
+# Cloud Build configuration (not needed in container)
+cloudbuild.yaml
+
+# Resources (mobile app icons/splash screens)
+resources
+
+# Editor config
+.editorconfig
