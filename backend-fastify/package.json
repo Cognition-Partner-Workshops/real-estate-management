@@ -5,7 +5,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
     "db:seeder": "node scripts/seeders/index.js"
@@ -33,6 +35,9 @@
   },
   "devDependencies": {
     "@types/busboy": "^0.3.1",
-    "nodemon": "^2.0.12"
+    "@vitest/coverage-v8": "^4.0.18",
+    "mongodb-memory-server": "^11.0.1",
+    "nodemon": "^2.0.12",
+    "vitest": "^4.0.18"
   }
 }
