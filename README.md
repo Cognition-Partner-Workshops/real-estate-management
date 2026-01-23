@@ -176,3 +176,45 @@ dummy user:
 /properties/
 /enquiries/
 ```
+
+# Deployment
+
+## Cloud Deployment (GCP Cloud Run)
+
+The application can be deployed to Google Cloud Platform using Cloud Run for serverless container hosting. This provides automatic scaling, zero-downtime deployments, and pay-per-use pricing.
+
+### Architecture
+
+The cloud deployment consists of two Cloud Run services:
+
+- **Backend Service** (`real-estate-backend`): Node.js Fastify API with MongoDB connection
+- **Frontend Service** (`real-estate-frontend`): Angular/Ionic SPA served via Nginx
+
+Both services are deployed automatically via Cloud Build when changes are pushed to the repository.
+
+### Quick Start
+
+1. Set up secrets in Google Cloud Secret Manager
+2. Configure Cloud Build triggers
+3. Push to the `main` branch to trigger deployment
+
+### Documentation
+
+For detailed deployment instructions, see the following guides in the `docs/` directory:
+
+- [Deployment Guide](docs/deployment-guide.md) - Complete deployment walkthrough
+- [Cloud Build Setup](docs/cloud-build-setup.md) - CI/CD pipeline configuration
+- [Secret Manager Setup](docs/secret-manager-setup.md) - Managing sensitive configuration
+- [Environment Variables](docs/environment-variables.md) - Configuration reference
+
+### Key Features
+
+- **Automatic scaling**: Services scale from 0 to 10 instances based on traffic
+- **Zero-downtime deployments**: Cloud Run handles traffic migration automatically
+- **WebSocket support**: Backend configured with session affinity for real-time notifications
+- **Secure secrets**: All sensitive data stored in Secret Manager
+- **Cost-effective**: Scale-to-zero when idle minimizes costs
+
+## Legacy Deployment (VMWare)
+
+The `vmware-legacy/` directory contains configuration for the previous VMWare-based deployment. This approach requires manual VM management and is maintained for reference only. New deployments should use the Cloud Run approach described above.
