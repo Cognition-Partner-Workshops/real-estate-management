@@ -30,7 +30,10 @@ export const register = async function (req, res) {
         .status(201)
         .send({ user_id, email: email.toLowerCase(), fullName, accessToken });
     } catch (error) {
-      return res.send(error);
+      if (error.code === 11000) {
+        return res.status(409).send({ message: "Error: Email already exists." });
+      }
+      return res.status(500).send({ message: "Error: Something went wrong." });
     }
   }
   return res.status(400).send({ message: "Error: form is invalid" });

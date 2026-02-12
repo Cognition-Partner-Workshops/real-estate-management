@@ -35,9 +35,12 @@ export const signIn = async function (req, res) {
     })
     await foundUser.save();
 
+    const userObj = foundUser.toObject();
+    delete userObj.password;
+    delete userObj.__v;
     return res.status(200).send({
       data: {
-        ...foundUser.toObject(),
+        ...userObj,
         accessToken,
       },
     });

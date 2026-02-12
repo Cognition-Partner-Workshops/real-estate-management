@@ -75,6 +75,10 @@ export const getMyProperties = async function (req, res) {
  * @param {string} filter
  * @returns {object}
  */
+const escapeRegex = function (str) {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+};
+
 const composeFilterQuery = function (filter, search) {
   const filterQuery = {};
   if (filter) {
@@ -96,9 +100,10 @@ const composeFilterQuery = function (filter, search) {
     }
   }
   if(search) {
+    const sanitizedSearch = escapeRegex(search);
     filterQuery.$or = [
-      { name: { $regex: search, $options: "i" } }, // Case-insensitive search on name
-      { address: { $regex: search, $options: "i" } }, // Assuming there's a description field
+      { name: { $regex: sanitizedSearch, $options: "i" } },
+      { address: { $regex: sanitizedSearch, $options: "i" } },
     ];
   }
   return filterQuery;

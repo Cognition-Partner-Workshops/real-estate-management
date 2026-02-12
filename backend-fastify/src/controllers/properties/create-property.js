@@ -22,10 +22,24 @@ export const createProperty = async function (req, res) {
   const user_id = req.user.id;
 
   try {
+    const { description, price, paymentFrequency, features, currency, contactNumber, contactEmail, transactionType, images, profileImage } = req.body;
     const newProperty = new Property({
       property_id: uuidv4(),
       user_id,
-      ...req.body,
+      name,
+      address,
+      type,
+      position,
+      ...(description !== undefined && { description }),
+      ...(price !== undefined && { price }),
+      ...(paymentFrequency !== undefined && { paymentFrequency }),
+      ...(features !== undefined && { features }),
+      ...(currency !== undefined && { currency }),
+      ...(contactNumber !== undefined && { contactNumber }),
+      ...(contactEmail !== undefined && { contactEmail }),
+      ...(transactionType !== undefined && { transactionType }),
+      ...(images !== undefined && { images }),
+      ...(profileImage !== undefined && { profileImage }),
     });
     const user = await User.findOne({ user_id });
     if(!user) {
@@ -49,6 +63,6 @@ export const createProperty = async function (req, res) {
     await newProperty.save();
     return res.status(201).send({ data: newProperty });
   } catch (error) {
-    return res.send(error);
+    return res.status(500).send({ message: "Error: Something went wrong creating property." });
   }
 };

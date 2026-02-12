@@ -39,7 +39,11 @@ export const createEnquiry = async function (req, res) {
         to: { user_id: userTo, keep: true },
       },
       property,
-      ...req.body,
+      title,
+      content,
+      topic,
+      email,
+      ...(req.body.replyTo !== undefined && { replyTo: req.body.replyTo }),
     });
     await newEnquiry.save();
 
@@ -62,6 +66,6 @@ export const createEnquiry = async function (req, res) {
     res.status(201).send({ data: newEnquiry });
     return;
   } catch (error) {
-    return res.status(400).send(error);
+    return res.status(500).send({ message: "Error: Something went wrong creating enquiry." });
   }
 };

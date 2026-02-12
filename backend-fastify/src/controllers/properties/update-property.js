@@ -85,6 +85,6 @@ export const updateProperty = async function (req, res) {
       message: "Success: Property is updated.",
     });
   } catch (error) {
-    return res.send(error);
+    return res.status(500).send({ message: "Error: Something went wrong updating property." });
   }
 };
