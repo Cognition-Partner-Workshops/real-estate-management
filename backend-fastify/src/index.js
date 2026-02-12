@@ -5,6 +5,7 @@ import FastifyJwt from "@fastify/jwt";
 import FastifyMultipart from "@fastify/multipart";
 import mongoose from "mongoose";
 import FastifyWebsocket from "@fastify/websocket";
+import FastifyRateLimit from "@fastify/rate-limit";
 
 // Local Files
 import { setFastifySwagger } from "./swagger.js";
@@ -22,9 +23,21 @@ dotenv.config();
 export const fastify = await Fastify({ logger: process.env.LOGGER || true });
 
 // We allow Multi Part Form
-fastify.register(FastifyMultipart);
+fastify.register(FastifyMultipart, {
+  limits: {
+    fileSize: 5 * 1024 * 1024,
+    files: 10,
+  },
+});
 // We add Secret Key
-fastify.register(FastifyJwt, { secret: process.env.SECRET_KEY || "secret" });
+const jwtSecret = process.env.SECRET_KEY;
+if (!jwtSecret || jwtSecret === 'secret') {
+  fastify.log.warn('WARNING: JWT SECRET_KEY is not set or is using the default value. Set a strong SECRET_KEY in .env');
+}
+fastify.register(FastifyJwt, {
+  secret: jwtSecret || "secret",
+  sign: { expiresIn: "24h" },
+});
 // We add Salt
 fastify.register(FastifyBcrypt, {
   saltWorkFactor: Number(process.env.SALT) || 12,
@@ -35,6 +48,10 @@ fastify.register(FastifyWebsocket, {
     clientTracking: true
   }
 });
+// We register rate limiting
+await fastify.register(FastifyRateLimit, {
+  global: false,
+});
 
 // We register authenticate
 fastify.decorate("authenticate", async function (request, reply) {
@@ -42,7 +59,7 @@ fastify.decorate("authenticate", async function (request, reply) {
     const user = await request.jwtVerify();
     request.user = user;
   } catch (err) {
-    reply.send(err);
+    return reply.status(401).send({ message: "Error: Unauthorized. Invalid or expired token." });
   }
 });
 // Generate API documentation

@@ -1,6 +1,5 @@
 import fastifyWebsocket from "@fastify/websocket";
 import { fastify } from "../index.js";
-import { userIdToken } from "../utils/users.js";
 
 /**
  * Parse message of weboscket.
@@ -60,10 +59,14 @@ export const setFastifyWebsocket = function () {
         return;
       }
       if (userToken) {
-        const userId = userIdToken(userToken);
-        // Store the user ID in the socket context
-        socket.userId = userId;
-        fastify.websocketServer.clients.add(socket);
+        try {
+          const decoded = fastify.jwt.verify(userToken);
+          socket.userId = decoded.id;
+          fastify.websocketServer.clients.add(socket);
+        } catch (err) {
+          socket.close(1008, "Invalid token");
+          return;
+        }
       }
       socket.on("close", () => {
         console.log("\n************  Web Socket - close *************\n");

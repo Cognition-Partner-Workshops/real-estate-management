@@ -17,6 +17,6 @@ export const getEnquiry = async function (req, res) {
     }
     return res.status(200).send({ data: enquiry });
   } catch (error) {
-    return res.status(400).send(error);
+    return res.status(500).send({ message: "Error: Something went wrong." });
   }
 };

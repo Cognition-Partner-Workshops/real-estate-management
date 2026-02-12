@@ -53,6 +53,6 @@ export const deleteProperty = async function (req, res) {
     }
     return res.status(200).send({ data: { ...property.toObject() } });
   } catch (error) {
-    return res.send(error);
+    return res.status(500).send({ message: "Error: Something went wrong deleting property." });
   }
 };
