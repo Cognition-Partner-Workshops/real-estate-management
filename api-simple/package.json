@@ -1,0 +1,30 @@
+{
+  "name": "real-estate-simple-api",
+  "version": "1.0.0",
+  "description": "A simple REST API for real estate property management with in-memory storage",
+  "main": "src/server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "lint": "eslint src/"
+  },
+  "keywords": [
+    "fastify",
+    "real-estate",
+    "api"
+  ],
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@fastify/cors": "^8.5.0",
+    "@fastify/swagger": "^8.15.0",
+    "@fastify/swagger-ui": "^1.10.2",
+    "dotenv": "^16.3.1",
+    "fastify": "4.28.0",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.56.0",
+    "nodemon": "^3.0.2"
+  }
+}
