@@ -4,9 +4,6 @@ param name string
 @description('Location for the resource')
 param location string
 
-@description('Principal ID of the Container App managed identity for secret access')
-param containerAppPrincipalId string = ''
-
 @description('Tags to apply to the resource')
 param tags object = {}
 
@@ -62,17 +59,6 @@ resource secretMapApiKey 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
   name: 'MAP-API-KEY'
   properties: {
     value: 'PLACEHOLDER-run-seed-keyvault-sh'
-  }
-}
-
-// Grant the Container App managed identity "Key Vault Secrets User" role
-resource keyVaultSecretsUserRole 'Microsoft.Authorization/roleAssignments@2022-04-01' = if (!empty(containerAppPrincipalId)) {
-  name: guid(keyVault.id, containerAppPrincipalId, '4633458b-17de-408a-b874-0445c86b69e6')
-  scope: keyVault
-  properties: {
-    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '4633458b-17de-408a-b874-0445c86b69e6')
-    principalId: containerAppPrincipalId
-    principalType: 'ServicePrincipal'
   }
 }
 

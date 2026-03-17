@@ -76,7 +76,6 @@ module keyVault 'modules/key-vault.bicep' = {
   params: {
     name: kvName
     location: location
-    containerAppPrincipalId: containerApps.outputs.backendPrincipalId
     tags: tags
   }
 }
@@ -107,8 +106,10 @@ module cosmosDb 'modules/cosmos-db.bicep' = {
 }
 
 // ---- Container Apps ----
+// Depends on Key Vault existing (for secret URL references at creation time)
 module containerApps 'modules/container-apps.bicep' = {
   name: 'container-apps-deployment'
+  dependsOn: [keyVault]
   params: {
     namePrefix: namePrefix
     location: location
@@ -121,6 +122,16 @@ module containerApps 'modules/container-apps.bicep' = {
     containerImage: containerImage
     keyVaultName: kvName
     tags: tags
+  }
+}
+
+// ---- Key Vault RBAC ----
+// Deployed after Container Apps so the managed identity principal ID is available
+module keyVaultRbac 'modules/key-vault-rbac.bicep' = {
+  name: 'keyvault-rbac-deployment'
+  params: {
+    keyVaultId: keyVault.outputs.id
+    containerAppPrincipalId: containerApps.outputs.backendPrincipalId
   }
 }
 

@@ -117,6 +117,10 @@ jobs:
             fi
             echo "Attempt $i/30: Status=$STATUS. Waiting 10s..."
             sleep 10
+            if [ "$i" = "30" ]; then
+              echo "Timed out waiting for revision to be ready."
+              exit 1
+            fi
           done
 
       - name: Run health check
