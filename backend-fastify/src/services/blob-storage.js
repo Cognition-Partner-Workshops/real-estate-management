@@ -23,21 +23,14 @@ if (process.env.AZURE_STORAGE_CONNECTION_STRING) {
  * @param {string} container - The container name.
  * @param {string} blobName - The blob name (key).
  * @param {import("stream").Readable} stream - The readable stream of file data.
- * @param {number} contentLength - The content length in bytes.
  * @param {string} contentType - The MIME content type.
  * @returns {Promise<string>} The public URL of the uploaded blob.
  */
-export async function uploadBlob(
-  container,
-  blobName,
-  stream,
-  contentLength,
-  contentType
-) {
+export async function uploadBlob(container, blobName, stream, contentType) {
   const containerClient = blobServiceClient.getContainerClient(container);
   const blockBlobClient = containerClient.getBlockBlobClient(blobName);
 
-  await blockBlobClient.uploadStream(stream, contentLength, undefined, {
+  await blockBlobClient.uploadStream(stream, undefined, undefined, {
     blobHTTPHeaders: { blobContentType: contentType },
   });
 

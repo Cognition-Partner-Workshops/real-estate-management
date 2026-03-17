@@ -41,7 +41,6 @@ export const addImagesProperty = async function (req, res) {
           containerName,
           imgName,
           data.file,
-          data.file.bytesRead,
           data.mimetype
         );
       } else {
