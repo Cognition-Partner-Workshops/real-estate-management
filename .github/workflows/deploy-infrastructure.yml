@@ -1,0 +1,146 @@
+name: Deploy Infrastructure
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'azure/bicep/**'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'azure/bicep/**'
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Target environment'
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+          - dev
+          - staging
+          - prod
+
+permissions:
+  id-token: write
+  contents: read
+  pull-requests: write
+
+jobs:
+  validate:
+    name: Validate Bicep Templates
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Azure Login via OIDC
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Validate Bicep templates
+        run: |
+          az bicep build --file azure/bicep/main.bicep
+          echo "Bicep validation passed."
+
+  preview:
+    name: Preview Infrastructure Changes
+    needs: validate
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment || 'dev' }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Azure Login via OIDC
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Determine parameter file
+        id: params
+        run: |
+          ENV="${{ github.event.inputs.environment || 'dev' }}"
+          echo "file=azure/bicep/parameters/${ENV}.bicepparam" >> "$GITHUB_OUTPUT"
+          echo "env=${ENV}" >> "$GITHUB_OUTPUT"
+
+      - name: Run What-If deployment
+        id: whatif
+        run: |
+          RESULT=$(az deployment group what-if \
+            --resource-group ${{ secrets.RESOURCE_GROUP }} \
+            --template-file azure/bicep/main.bicep \
+            --parameters ${{ steps.params.outputs.file }} \
+            --no-pretty-print 2>&1) || true
+          echo "result<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$RESULT" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+
+      - name: Comment on PR with What-If results
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const output = `### Infrastructure What-If Results
+            
+            **Environment:** \`${{ steps.params.outputs.env }}\`
+            
+            <details>
+            <summary>What-If Output</summary>
+
+            \`\`\`
+            ${{ steps.whatif.outputs.result }}
+            \`\`\`
+            </details>
+            
+            *Triggered by @${{ github.actor }}*`;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            });
+
+  deploy:
+    name: Deploy Infrastructure
+    needs: validate
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment || 'dev' }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Azure Login via OIDC
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Determine parameter file
+        id: params
+        run: |
+          ENV="${{ github.event.inputs.environment || 'dev' }}"
+          echo "file=azure/bicep/parameters/${ENV}.bicepparam" >> "$GITHUB_OUTPUT"
+
+      - name: Deploy Bicep templates
+        run: |
+          az deployment group create \
+            --resource-group ${{ secrets.RESOURCE_GROUP }} \
+            --template-file azure/bicep/main.bicep \
+            --parameters ${{ steps.params.outputs.file }} \
+            --verbose
+
+      - name: Output deployment results
+        run: |
+          az deployment group show \
+            --resource-group ${{ secrets.RESOURCE_GROUP }} \
+            --name main \
+            --query "properties.outputs" -o json

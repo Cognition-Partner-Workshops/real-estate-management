@@ -56,6 +56,11 @@ setFastifyRoutes(fastify);
 // We set webSocket connection
 setFastifyWebsocket();
 
+// Health check endpoint (independent of database connectivity)
+fastify.get('/health', async (request, reply) => {
+  return { status: 'ok', timestamp: new Date().toISOString() };
+});
+
 mongoose
   .connect(process.env.DB_CONNECT, {
     useUnifiedTopology: true,

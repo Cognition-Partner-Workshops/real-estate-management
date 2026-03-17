@@ -1,0 +1,86 @@
+name: Deploy Frontend
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'frontend/**'
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Target environment'
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+          - dev
+          - staging
+          - prod
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  build-and-deploy:
+    name: Build & Deploy to Static Web Apps
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment || 'dev' }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Generate production environment config
+        working-directory: frontend
+        run: |
+          cat > src/environments/environment.prod.ts << 'ENVEOF'
+          export const environment = {
+            production: true,
+            api: {
+              server: '${{ secrets.BACKEND_URL }}/',
+              mapKey: '${{ secrets.MAP_API_KEY }}',
+              googleAuthClientId: '${{ secrets.GOOGLE_CLIENT_ID }}',
+              webSocketUrl: '${{ secrets.BACKEND_WS_URL }}/websocket',
+            },
+            map: {
+              tiles: {
+                default: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                dark: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+              },
+            },
+            features: {
+              restrictedMode: false,
+              restrictedHeading: 'Restricted',
+              restrictedMessage: 'This feature is currently disabled in this mode.',
+            },
+          };
+          ENVEOF
+
+      - name: Build Tailwind CSS
+        working-directory: frontend
+        run: npm run tailwind:build
+
+      - name: Build Angular app for production
+        working-directory: frontend
+        run: npx ng build --configuration production
+
+      - name: Deploy to Azure Static Web Apps
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.SWA_DEPLOYMENT_TOKEN }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          action: 'upload'
+          app_location: 'frontend/www'
+          skip_app_build: true
+          skip_api_build: true
