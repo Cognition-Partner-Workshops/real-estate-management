@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.environment || 'dev' }}
     outputs:
-      image-tag: ${{ steps.meta.outputs.tags }}
+      image-tag: ${{ steps.set-tag.outputs.image-tag }}
       image-digest: ${{ steps.build-push.outputs.digest }}
     steps:
       - name: Checkout repository
@@ -68,6 +68,12 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+      - name: Set image tag output
+        id: set-tag
+        run: |
+          SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-7)
+          echo "image-tag=${SHORT_SHA}" >> "$GITHUB_OUTPUT"
+
   deploy:
     name: Deploy to Container Apps
     needs: build-and-push
@@ -95,7 +101,7 @@ jobs:
         with:
           resourceGroup: ${{ secrets.RESOURCE_GROUP }}
           containerAppName: ${{ secrets.CONTAINER_APP_NAME }}
-          imageToDeploy: ${{ secrets.ACR_LOGIN_SERVER }}/rem-backend:${{ github.sha }}
+          imageToDeploy: ${{ secrets.ACR_LOGIN_SERVER }}/rem-backend:${{ needs.build-and-push.outputs.image-tag }}
 
       - name: Wait for revision to be ready
         run: |

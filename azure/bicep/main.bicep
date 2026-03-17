@@ -20,6 +20,10 @@ param projectName string = 'rem'
 @description('Container image (optional, uses ACR default if empty)')
 param containerImage string = ''
 
+@description('Cosmos DB administrator login password')
+@secure()
+param cosmosDbAdminPassword string
+
 var namePrefix = '${projectName}-${environment}'
 var tags = {
   project: 'real-estate-management'
@@ -96,6 +100,8 @@ module cosmosDb 'modules/cosmos-db.bicep' = {
     location: location
     environment: environment
     privateEndpointSubnetId: networking.outputs.privateEndpointSubnetId
+    vnetId: networking.outputs.vnetId
+    administratorLoginPassword: cosmosDbAdminPassword
     tags: tags
   }
 }

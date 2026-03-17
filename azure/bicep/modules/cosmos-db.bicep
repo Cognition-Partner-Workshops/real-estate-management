@@ -11,6 +11,13 @@ param environment string
 @description('Subnet ID for private endpoint')
 param privateEndpointSubnetId string
 
+@description('VNet ID to link the private DNS zone to')
+param vnetId string
+
+@description('Administrator login password for the Cosmos DB cluster')
+@secure()
+param administratorLoginPassword string
+
 @description('Tags to apply to the resource')
 param tags object = {}
 
@@ -24,7 +31,7 @@ resource cosmosDbAccount 'Microsoft.DocumentDB/mongoClusters@2024-02-15-preview'
   tags: tags
   properties: {
     administratorLogin: 'remadmin'
-    administratorLoginPassword: 'PLACEHOLDER-change-after-deploy'
+    administratorLoginPassword: administratorLoginPassword
     nodeGroupSpecs: [
       {
         kind: 'Shard'
@@ -64,6 +71,18 @@ resource privateDnsZone 'Microsoft.Network/privateDnsZones@2020-06-01' = {
   name: 'privatelink.mongocluster.cosmos.azure.com'
   location: 'global'
   tags: tags
+}
+
+resource privateDnsZoneVnetLink 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020-06-01' = {
+  parent: privateDnsZone
+  name: '${name}-vnet-link'
+  location: 'global'
+  properties: {
+    virtualNetwork: {
+      id: vnetId
+    }
+    registrationEnabled: false
+  }
 }
 
 resource privateDnsZoneGroup 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2023-09-01' = {
