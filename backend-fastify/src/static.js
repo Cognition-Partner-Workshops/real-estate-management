@@ -4,7 +4,7 @@ import path from "path";
 export const setFastifyStatic = function (fastify) {
   // When Azure Blob Storage is configured, images are served directly
   // from blob URLs — no need to serve local files through the backend.
-  if (process.env.AZURE_STORAGE_CONNECTION_STRING) {
+  if (process.env.AZURE_STORAGE_CONNECTION_STRING || process.env.AZURE_STORAGE_ACCOUNT_NAME) {
     return;
   }
 
