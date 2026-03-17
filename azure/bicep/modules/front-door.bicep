@@ -39,7 +39,7 @@ resource wafPolicy 'Microsoft.Network/FrontDoorWebApplicationFirewallPolicies@20
       enabledState: 'Enabled'
     }
     managedRules: {
-      managedRuleSets: [
+      managedRuleSets: environment == 'prod' ? [
         {
           ruleSetType: 'Microsoft_DefaultRuleSet'
           ruleSetVersion: '2.1'
@@ -49,7 +49,7 @@ resource wafPolicy 'Microsoft.Network/FrontDoorWebApplicationFirewallPolicies@20
           ruleSetType: 'Microsoft_BotManagerRuleSet'
           ruleSetVersion: '1.0'
         }
-      ]
+      ] : []
     }
   }
 }

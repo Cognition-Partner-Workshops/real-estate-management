@@ -93,7 +93,7 @@ jobs:
           script: |
             const output = `### Infrastructure What-If Results\n\n**Environment:** \`${process.env.PARAMS_ENV}\`\n\n<details>\n<summary>What-If Output</summary>\n\n\`\`\`\n${process.env.WHATIF_RESULT}\n\`\`\`\n</details>\n\n*Triggered by @${process.env.ACTOR}*`;
             
-            github.rest.issues.createComment({
+            await github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
