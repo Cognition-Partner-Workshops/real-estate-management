@@ -3,8 +3,15 @@ import util from "util";
 import path from "path";
 import { pipeline } from "stream";
 import { Property } from "../../models/property.js";
+import {
+  uploadBlob,
+  deleteBlob,
+  containerName,
+  blobServiceClient,
+} from "../../services/blob-storage.js";
 
 const pump = util.promisify(pipeline);
+const useBlobStorage = !!blobServiceClient;
 
 const isPropertyOwner = function (property, req, res) {
   const user_id = req.user.id;
@@ -28,13 +35,24 @@ export const addImagesProperty = async function (req, res) {
     const parts = await req.files();
     for await (const data of parts) {
       const imgName = new Date().getTime() + "-" + data.filename;
-      fs.statSync("uploads/");
-      await pump(
-        data.file,
-        fs.createWriteStream(path.join(process.cwd(), "uploads", imgName))
-      );
-      const image =
-        req.protocol + "://" + req.headers.host + "/uploads/" + imgName;
+      let image;
+      if (useBlobStorage) {
+        image = await uploadBlob(
+          containerName,
+          imgName,
+          data.file,
+          data.file.bytesRead,
+          data.mimetype
+        );
+      } else {
+        fs.statSync("uploads/");
+        await pump(
+          data.file,
+          fs.createWriteStream(path.join(process.cwd(), "uploads", imgName))
+        );
+        image =
+          req.protocol + "://" + req.headers.host + "/uploads/" + imgName;
+      }
       // We update Property images
       property.images.push(image);
       await property.save(); // Wait for the save operation to complete
@@ -73,14 +91,22 @@ export const unlinkImages = function (propertyImages = []) {
     const imgSplt = img.split("/");
     return imgSplt[imgSplt.length - 1];
   });
-  images.forEach((img) => {
-    const __dirname = path.resolve();
-    fs.unlink(__dirname + "/uploads/" + img, (err) => {
-      if (err) {
-        console.log(err);
-        return;
-      }
-      console.log("Successfully deleted " + img);
+  if (useBlobStorage) {
+    images.forEach((img) => {
+      deleteBlob(containerName, img).catch((err) => {
+        console.log("Error deleting blob " + img, err);
+      });
     });
-  });
+  } else {
+    images.forEach((img) => {
+      const __dirname = path.resolve();
+      fs.unlink(__dirname + "/uploads/" + img, (err) => {
+        if (err) {
+          console.log(err);
+          return;
+        }
+        console.log("Successfully deleted " + img);
+      });
+    });
+  }
 };

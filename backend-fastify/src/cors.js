@@ -1,12 +1,11 @@
 import FastifyCors from "@fastify/cors";
 
 export const setFastifyCors = function (fastify) {
+  const origins = process.env.CORS_ORIGINS
+    ? process.env.CORS_ORIGINS.split(",")
+    : ["http://localhost:9000", "http://localhost:8100", "http://localhost:4200"];
+
   fastify.register(FastifyCors, {
-    // put your options here
-    origin: [
-      "http://localhost:9000",
-      "http://localhost:8100",
-      "http://localhost:4200",
-    ],
+    origin: origins,
   });
 };

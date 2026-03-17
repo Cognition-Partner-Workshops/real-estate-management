@@ -17,6 +17,8 @@
   "author": "eevan7a9",
   "license": "ISC",
   "dependencies": {
+    "@azure/identity": "^4.13.0",
+    "@azure/storage-blob": "^12.31.0",
     "@fastify/busboy": "^2.1.1",
     "@fastify/cors": "^8.5.0 ",
     "@fastify/jwt": "^8.0.0",
