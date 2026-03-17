@@ -249,6 +249,12 @@ resource frontendApp 'Microsoft.App/containerApps@2024-03-01' = {
   name: '${namePrefix}-frontend'
   location: location
   tags: tags
+  identity: {
+    type: 'UserAssigned'
+    userAssignedIdentities: {
+      '${backendIdentityId}': {}
+    }
+  }
   properties: {
     managedEnvironmentId: acaEnvironment.id
     configuration: {

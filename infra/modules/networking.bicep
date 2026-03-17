@@ -41,6 +41,9 @@ resource vnet 'Microsoft.Network/virtualNetworks@2023-11-01' = {
         name: 'snet-aca'
         properties: {
           addressPrefix: acaSubnetAddressPrefix
+          networkSecurityGroup: {
+            id: acaNsg.id
+          }
           delegations: [
             {
               name: 'Microsoft.App.environments'
@@ -56,6 +59,9 @@ resource vnet 'Microsoft.Network/virtualNetworks@2023-11-01' = {
         properties: {
           addressPrefix: privateEndpointsSubnetAddressPrefix
           privateEndpointNetworkPolicies: 'Disabled'
+          networkSecurityGroup: {
+            id: privateEndpointNsg.id
+          }
         }
       }
     ]
