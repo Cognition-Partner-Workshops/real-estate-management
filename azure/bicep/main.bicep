@@ -174,9 +174,6 @@ output backendAppName string = containerApps.outputs.backendAppName
 @description('Static Web App default hostname')
 output staticWebAppHostname string = staticWebApp.outputs.defaultHostname
 
-@description('Static Web App deployment token')
-output staticWebAppDeploymentToken string = staticWebApp.outputs.deploymentToken
-
 @description('Front Door API endpoint')
 output frontDoorApiEndpoint string = 'https://${frontDoor.outputs.apiEndpointHostname}'
 

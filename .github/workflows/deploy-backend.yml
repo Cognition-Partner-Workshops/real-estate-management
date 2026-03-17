@@ -144,7 +144,7 @@ jobs:
           exit 1
 
       - name: Rollback on failure
-        if: failure() && steps.health-check.outcome == 'failure'
+        if: failure()
         run: |
           echo "Rolling back to previous revision: ${{ steps.current-revision.outputs.revision }}"
           if [ -n "${{ steps.current-revision.outputs.revision }}" ]; then

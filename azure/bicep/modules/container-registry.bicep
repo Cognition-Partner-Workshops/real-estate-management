@@ -11,7 +11,7 @@ param environment string
 @description('Tags to apply to the resource')
 param tags object = {}
 
-var skuName = environment == 'prod' ? 'Standard' : 'Basic'
+var skuName = environment == 'prod' ? 'Premium' : 'Basic'
 
 resource containerRegistry 'Microsoft.ContainerRegistry/registries@2023-07-01' = {
   name: name
