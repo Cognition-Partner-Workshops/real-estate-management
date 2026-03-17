@@ -63,10 +63,12 @@ mongoose
   })
   .then(() => {
     const PORT = process.env.PORT || 5000;
+    const HOST = process.env.HOST || "localhost";
     try {
       fastify.listen(
         {
           port: PORT,
+          host: HOST,
         },
         () => {
           console.log("Listening on PORT: " + PORT);
