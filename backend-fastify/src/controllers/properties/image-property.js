@@ -6,12 +6,11 @@ import { Property } from "../../models/property.js";
 import {
   uploadBlob,
   deleteBlob,
-  containerName,
-  blobServiceClient,
+  getContainerName,
+  isBlobStorageEnabled,
 } from "../../services/blob-storage.js";
 
 const pump = util.promisify(pipeline);
-const useBlobStorage = !!blobServiceClient;
 
 const isPropertyOwner = function (property, req, res) {
   const user_id = req.user.id;
@@ -36,9 +35,9 @@ export const addImagesProperty = async function (req, res) {
     for await (const data of parts) {
       const imgName = new Date().getTime() + "-" + data.filename;
       let image;
-      if (useBlobStorage) {
+      if (isBlobStorageEnabled()) {
         image = await uploadBlob(
-          containerName,
+          getContainerName(),
           imgName,
           data.file,
           data.mimetype
@@ -90,9 +89,9 @@ export const unlinkImages = function (propertyImages = []) {
     const imgSplt = img.split("/");
     return imgSplt[imgSplt.length - 1];
   });
-  if (useBlobStorage) {
+  if (isBlobStorageEnabled()) {
     images.forEach((img) => {
-      deleteBlob(containerName, img).catch((err) => {
+      deleteBlob(getContainerName(), img).catch((err) => {
         console.log("Error deleting blob " + img, err);
       });
     });

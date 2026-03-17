@@ -14,6 +14,9 @@ export const setFastifyRoutes = function (fastify) {
     console.log("GET Request at base '/'");
     res.send(true);
   });
+  fastify.get("/health", (_, res) => {
+    res.status(200).send({ status: "ok" });
+  });
   fastify.register(usersRoutes, { prefix: "/users" });
   fastify.register(authRoutes, { prefix: "/auth" });
   fastify.register(propertiesRoutes, { prefix: "/properties" });
