@@ -105,6 +105,3 @@ output id string = cosmosDbAccount.id
 
 @description('The name of the Cosmos DB account')
 output name string = cosmosDbAccount.name
-
-@description('The connection string for the Cosmos DB account')
-output connectionString string = cosmosDbAccount.properties.connectionString

@@ -70,6 +70,17 @@ module containerRegistry 'modules/container-registry.bicep' = {
   }
 }
 
+// ---- Managed Identity ----
+// Created early so RBAC can be assigned before Container Apps references KV secrets
+module managedIdentity 'modules/managed-identity.bicep' = {
+  name: 'managed-identity-deployment'
+  params: {
+    namePrefix: namePrefix
+    location: location
+    tags: tags
+  }
+}
+
 // ---- Key Vault ----
 module keyVault 'modules/key-vault.bicep' = {
   name: 'keyvault-deployment'
@@ -105,11 +116,22 @@ module cosmosDb 'modules/cosmos-db.bicep' = {
   }
 }
 
+// ---- Key Vault RBAC ----
+// Grants the user-assigned managed identity access to Key Vault secrets
+// Deployed BEFORE Container Apps so KV secret references resolve on first deploy
+module keyVaultRbac 'modules/key-vault-rbac.bicep' = {
+  name: 'keyvault-rbac-deployment'
+  params: {
+    keyVaultId: keyVault.outputs.id
+    principalId: managedIdentity.outputs.principalId
+  }
+}
+
 // ---- Container Apps ----
-// Depends on Key Vault existing (for secret URL references at creation time)
+// Depends on Key Vault RBAC so the identity can read secrets at creation time
 module containerApps 'modules/container-apps.bicep' = {
   name: 'container-apps-deployment'
-  dependsOn: [keyVault]
+  dependsOn: [keyVaultRbac]
   params: {
     namePrefix: namePrefix
     location: location
@@ -121,17 +143,8 @@ module containerApps 'modules/container-apps.bicep' = {
     containerRegistryLoginServer: containerRegistry.outputs.loginServer
     containerImage: containerImage
     keyVaultName: kvName
+    managedIdentityId: managedIdentity.outputs.id
     tags: tags
-  }
-}
-
-// ---- Key Vault RBAC ----
-// Deployed after Container Apps so the managed identity principal ID is available
-module keyVaultRbac 'modules/key-vault-rbac.bicep' = {
-  name: 'keyvault-rbac-deployment'
-  params: {
-    keyVaultId: keyVault.outputs.id
-    containerAppPrincipalId: containerApps.outputs.backendPrincipalId
   }
 }
 

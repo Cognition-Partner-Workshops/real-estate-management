@@ -30,6 +30,9 @@ param containerImage string = ''
 @description('Key Vault name for secret references')
 param keyVaultName string
 
+@description('Resource ID of the user-assigned managed identity')
+param managedIdentityId string
+
 @description('Tags to apply to the resources')
 param tags object = {}
 
@@ -62,7 +65,10 @@ resource backendApp 'Microsoft.App/containerApps@2023-05-01' = {
   location: location
   tags: tags
   identity: {
-    type: 'SystemAssigned'
+    type: 'UserAssigned'
+    userAssignedIdentities: {
+      '${managedIdentityId}': {}
+    }
   }
   properties: {
     managedEnvironmentId: containerAppsEnvironment.id
@@ -85,24 +91,24 @@ resource backendApp 'Microsoft.App/containerApps@2023-05-01' = {
       registries: [
         {
           server: containerRegistryLoginServer
-          identity: 'system'
+          identity: managedIdentityId
         }
       ]
       secrets: [
         {
           name: 'db-connect'
           keyVaultUrl: 'https://${keyVaultName}${az.environment().suffixes.keyvaultDns}/secrets/DB-CONNECT'
-          identity: 'system'
+          identity: managedIdentityId
         }
         {
           name: 'secret-key'
           keyVaultUrl: 'https://${keyVaultName}${az.environment().suffixes.keyvaultDns}/secrets/SECRET-KEY'
-          identity: 'system'
+          identity: managedIdentityId
         }
         {
           name: 'google-auth-client-id'
           keyVaultUrl: 'https://${keyVaultName}${az.environment().suffixes.keyvaultDns}/secrets/GOOGLE-AUTH-CLIENT-ID'
-          identity: 'system'
+          identity: managedIdentityId
         }
       ]
     }
@@ -183,8 +189,6 @@ output backendFqdn string = backendApp.properties.configuration.ingress.fqdn
 @description('The backend app URL')
 output backendUrl string = 'https://${backendApp.properties.configuration.ingress.fqdn}'
 
-@description('The principal ID of the backend Container App managed identity')
-output backendPrincipalId string = backendApp.identity.principalId
 
 @description('The name of the backend Container App')
 output backendAppName string = backendApp.name

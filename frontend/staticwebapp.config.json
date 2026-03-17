@@ -35,11 +35,5 @@
     ".json": "application/json",
     ".woff": "font/woff",
     ".woff2": "font/woff2"
-  },
-  "responseOverrides": {
-    "404": {
-      "rewrite": "/index.html",
-      "statusCode": 200
-    }
   }
 }
