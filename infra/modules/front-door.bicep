@@ -231,6 +231,11 @@ resource defaultRoute 'Microsoft.Cdn/profiles/afdEndpoints/routes@2023-07-01-pre
     linkToDefaultDomain: 'Enabled'
     httpsRedirect: 'Enabled'
     enabledState: 'Enabled'
+    customDomains: !empty(customDomainName) ? [
+      {
+        id: customDomain.id
+      }
+    ] : []
   }
   dependsOn: [
     frontendOrigin
@@ -255,6 +260,11 @@ resource apiRoute 'Microsoft.Cdn/profiles/afdEndpoints/routes@2023-07-01-preview
     linkToDefaultDomain: 'Enabled'
     httpsRedirect: 'Enabled'
     enabledState: 'Enabled'
+    customDomains: !empty(customDomainName) ? [
+      {
+        id: customDomain.id
+      }
+    ] : []
   }
   dependsOn: [
     backendOrigin
@@ -284,6 +294,11 @@ resource websocketRoute 'Microsoft.Cdn/profiles/afdEndpoints/routes@2023-07-01-p
         id: webSocketRuleSet.id
       }
     ]
+    customDomains: !empty(customDomainName) ? [
+      {
+        id: customDomain.id
+      }
+    ] : []
   }
   dependsOn: [
     backendOrigin
@@ -309,6 +324,11 @@ resource uploadsRoute 'Microsoft.Cdn/profiles/afdEndpoints/routes@2023-07-01-pre
     linkToDefaultDomain: 'Enabled'
     httpsRedirect: 'Enabled'
     enabledState: 'Enabled'
+    customDomains: !empty(customDomainName) ? [
+      {
+        id: customDomain.id
+      }
+    ] : []
   }
   dependsOn: [
     storageOrigin
