@@ -259,7 +259,7 @@ az monitor log-analytics query \
 
 2. **Use Free tier Static Web Apps for dev**: The dev parameter file uses Free SKU for Static Web Apps; only prod uses Standard.
 
-3. **Basic ACR for non-prod**: Dev environments use Basic SKU Container Registry (cheaper), while prod uses Standard for better throughput.
+3. **Basic ACR for non-prod**: Dev environments use Basic SKU Container Registry (cheaper), while prod uses Premium for geo-replication and retention policies.
 
 4. **Right-size Cosmos DB**: Dev uses M30 tier with a single node; prod uses M40 with HA. Evaluate actual usage patterns and adjust.
 
