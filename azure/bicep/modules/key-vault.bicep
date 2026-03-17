@@ -29,38 +29,8 @@ resource keyVault 'Microsoft.KeyVault/vaults@2023-07-01' = {
   }
 }
 
-// Secret placeholders - values populated via seed-keyvault.sh
-resource secretDbConnect 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
-  parent: keyVault
-  name: 'DB-CONNECT'
-  properties: {
-    value: 'PLACEHOLDER-run-seed-keyvault-sh'
-  }
-}
-
-resource secretSecretKey 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
-  parent: keyVault
-  name: 'SECRET-KEY'
-  properties: {
-    value: 'PLACEHOLDER-run-seed-keyvault-sh'
-  }
-}
-
-resource secretGoogleAuthClientId 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
-  parent: keyVault
-  name: 'GOOGLE-AUTH-CLIENT-ID'
-  properties: {
-    value: 'PLACEHOLDER-run-seed-keyvault-sh'
-  }
-}
-
-resource secretMapApiKey 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
-  parent: keyVault
-  name: 'MAP-API-KEY'
-  properties: {
-    value: 'PLACEHOLDER-run-seed-keyvault-sh'
-  }
-}
+// Secrets are managed exclusively via azure/scripts/seed-keyvault.sh
+// Do NOT declare secret resources here — ARM overwrites values on every deployment
 
 @description('The resource ID of the Key Vault')
 output id string = keyVault.id
