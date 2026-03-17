@@ -89,6 +89,7 @@ Add the following **per-environment** secrets (create `dev`, `staging`, `prod` e
 | `BACKEND_WS_URL` | WebSocket URL (e.g., `wss://rem-dev-backend.azurecontainerapps.io`) |
 | `MAP_API_KEY` | Map tile API key |
 | `GOOGLE_CLIENT_ID` | Google OAuth client ID |
+| `COSMOS_DB_ADMIN_PASSWORD` | Cosmos DB administrator login password |
 
 ### 3. Deploy Infrastructure
 

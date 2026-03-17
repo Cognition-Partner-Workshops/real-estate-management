@@ -77,6 +77,7 @@ jobs:
             --resource-group ${{ secrets.RESOURCE_GROUP }} \
             --template-file azure/bicep/main.bicep \
             --parameters ${{ steps.params.outputs.file }} \
+            --parameters cosmosDbAdminPassword=${{ secrets.COSMOS_DB_ADMIN_PASSWORD }} \
             --no-pretty-print 2>&1) || true
           echo "result<<EOF" >> "$GITHUB_OUTPUT"
           echo "$RESULT" >> "$GITHUB_OUTPUT"
@@ -136,6 +137,7 @@ jobs:
             --resource-group ${{ secrets.RESOURCE_GROUP }} \
             --template-file azure/bicep/main.bicep \
             --parameters ${{ steps.params.outputs.file }} \
+            --parameters cosmosDbAdminPassword=${{ secrets.COSMOS_DB_ADMIN_PASSWORD }} \
             --verbose
 
       - name: Output deployment results

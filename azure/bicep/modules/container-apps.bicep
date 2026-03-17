@@ -79,7 +79,7 @@ resource backendApp 'Microsoft.App/containerApps@2023-05-01' = {
           allowedOrigins: ['*']
           allowedMethods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS']
           allowedHeaders: ['*']
-          allowCredentials: true
+          allowCredentials: false
         }
       }
       registries: [
